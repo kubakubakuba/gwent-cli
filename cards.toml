@@ -1,0 +1,2541 @@
+[[cards]]
+name = "Mysterious Elf"
+id = "142"
+filename = "mysterious_elf"
+description = ""
+count = 1
+faction = "ANY"
+row = [ "CLOSE",]
+value = 0
+card_class = "HeroCard"
+ability = "SPY"
+
+[[cards]]
+name = "Decoy"
+id = "1"
+filename = "decoy"
+description = ""
+count = 3
+card_class = "SpecialCard"
+special_type = "DECOY"
+
+[[cards]]
+name = "Biting Frost"
+id = "4"
+filename = "frost"
+description = ""
+count = 3
+card_class = "WeatherCard"
+weather_type = "FROST"
+
+[[cards]]
+name = "Cirilla Fiona Elen Riannon"
+id = "139"
+filename = "ciri"
+description = ""
+count = 1
+faction = "ANY"
+row = [ "CLOSE",]
+value = 15
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Clear Weather"
+id = "7"
+filename = "clear"
+description = ""
+count = 2
+card_class = "WeatherCard"
+weather_type = "CLEAR"
+
+[[cards]]
+name = "Commander's Horn"
+id = "2"
+filename = "horn"
+description = ""
+count = 3
+card_class = "SpecialCard"
+special_type = "COMMANDERS_HORN"
+
+[[cards]]
+name = "Dandelion"
+id = "11"
+filename = "dandelion"
+description = ""
+count = 1
+faction = "ANY"
+row = [ "CLOSE",]
+value = 2
+card_class = "UnitCard"
+ability = "HORN"
+
+[[cards]]
+name = "Emiel Regis Rohellec Terzieff"
+id = ""
+filename = "emiel"
+description = ""
+count = 1
+faction = "ANY"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Geralt of Rivia"
+id = "138"
+filename = "geralt"
+description = ""
+count = 1
+faction = "ANY"
+row = [ "CLOSE",]
+value = 15
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Impenetrable Fog"
+id = "5"
+filename = "fog"
+description = ""
+count = 3
+card_class = "WeatherCard"
+weather_type = "FOG"
+
+[[cards]]
+name = "Scorch"
+id = "3"
+filename = "scorch"
+description = ""
+count = 3
+card_class = "SpecialCard"
+special_type = "SCORCH"
+
+[[cards]]
+name = "Torrential Rain"
+id = "6"
+filename = "rain"
+description = ""
+count = 2
+card_class = "WeatherCard"
+weather_type = "RAIN"
+
+[[cards]]
+name = "Triss Merigold"
+id = "141"
+filename = "triss"
+description = ""
+count = 1
+faction = "ANY"
+row = [ "CLOSE",]
+value = 7
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Vesemir"
+id = "9"
+filename = "vesemir"
+description = ""
+count = 1
+faction = "ANY"
+row = [ "CLOSE",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Villentretenmerth"
+id = "8"
+filename = "villen"
+description = ""
+count = 1
+faction = "ANY"
+row = [ "CLOSE",]
+value = 7
+card_class = "UnitCard"
+ability = "SCORCH"
+
+[[cards]]
+name = "Yennefer of Vengerberg"
+id = "140"
+filename = "yennefer"
+description = ""
+count = 1
+faction = "ANY"
+row = [ "RANGED",]
+value = 7
+card_class = "HeroCard"
+ability = "MEDIC"
+
+[[cards]]
+name = "Zoltan Chivay"
+id = "10"
+filename = "zoltan"
+description = ""
+count = 1
+faction = "ANY"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Olgierd von Everec"
+id = ""
+filename = "olgierd"
+description = ""
+count = 1
+faction = "ANY"
+row = [ "CLOSE", "RANGED",]
+value = 6
+card_class = "UnitCard"
+ability = "MORALE_BOOST"
+
+[[cards]]
+name = "Gaunter O'Dimm"
+id = ""
+filename = "gaunter_odimm"
+description = ""
+count = 1
+faction = "ANY"
+row = [ "SIEGE",]
+value = 2
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Gaunter O'Dimm - Darkness"
+id = ""
+filename = "gaunter_odimm_darkness"
+description = ""
+count = 3
+faction = "ANY"
+row = [ "RANGED",]
+value = 4
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Cow"
+id = ""
+filename = "cow"
+description = ""
+count = 1
+faction = "ANY"
+row = [ "RANGED",]
+value = 0
+card_class = "UnitCard"
+ability = "AVENGER"
+
+[[cards]]
+name = "Bovine Defense Force"
+id = ""
+filename = "chort"
+description = ""
+count = 0
+faction = "ANY"
+row = [ "CLOSE",]
+value = 8
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Foltest - King of Temeria"
+id = "5"
+filename = "foltest_silver"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "FOLTEST_KING"
+
+[[cards]]
+name = "Foltest - Lord Commander of the North"
+id = "8"
+filename = "foltest_gold"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "FOLTEST_LORD"
+
+[[cards]]
+name = "Foltest - The Siegemaster"
+id = "6"
+filename = "foltest_copper"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "FOLTEST_SIEGEMASTER"
+
+[[cards]]
+name = "Foltest - The Steel-Forged"
+id = "7"
+filename = "foltest_bronze"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "FOLTEST_STEELFORGED"
+
+[[cards]]
+name = "Foltest - Son of Medell"
+id = ""
+filename = "foltest_son_of_medell"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "FOLTEST_SON"
+
+[[cards]]
+name = "Ballista"
+id = "79"
+filename = "ballista"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "SIEGE",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Blue Stripes Commando"
+id = "92"
+filename = "blue_stripes"
+description = ""
+count = 3
+faction = "NORTHERN_REALMS"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = "TIGHT_BOND"
+
+[[cards]]
+name = "Catapult"
+id = "75"
+filename = "catapult_1"
+description = ""
+count = 2
+faction = "NORTHERN_REALMS"
+row = [ "SIEGE",]
+value = 8
+card_class = "UnitCard"
+ability = "TIGHT_BOND"
+
+[[cards]]
+name = "Crinfrid Reavers Dragon Hunter"
+id = "87"
+filename = "crinfrid"
+description = ""
+count = 3
+faction = "NORTHERN_REALMS"
+row = [ "RANGED",]
+value = 5
+card_class = "UnitCard"
+ability = "TIGHT_BOND"
+
+[[cards]]
+name = "Dethmold"
+id = "76"
+filename = "dethmold"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "RANGED",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Dun Banner Medic"
+id = "88"
+filename = "banner_nurse"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "SIEGE",]
+value = 5
+card_class = "UnitCard"
+ability = "MEDIC"
+
+[[cards]]
+name = "Esterad Thyssen"
+id = "11"
+filename = "esterad"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "CLOSE",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "John Natalis"
+id = "10"
+filename = "natalis"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "CLOSE",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Kaedweni Siege Expert"
+id = "98"
+filename = "kaedwen_siege"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "SIEGE",]
+value = 1
+card_class = "UnitCard"
+ability = "MORALE_BOOST"
+
+[[cards]]
+name = "Kaedweni Siege Expert"
+id = "99"
+filename = "kaedwen_siege_1"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "SIEGE",]
+value = 1
+card_class = "UnitCard"
+ability = "MORALE_BOOST"
+
+[[cards]]
+name = "Kaedweni Siege Expert"
+id = "100"
+filename = "kaedwen_siege_2"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "SIEGE",]
+value = 1
+card_class = "UnitCard"
+ability = "MORALE_BOOST"
+
+[[cards]]
+name = "Keira Metz"
+id = "84"
+filename = "keira"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "RANGED",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Philippa Eilhart"
+id = "12"
+filename = "philippa"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "RANGED",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Poor Fucking Infantry"
+id = "95"
+filename = "poor_infantry"
+description = ""
+count = 4
+faction = "NORTHERN_REALMS"
+row = [ "CLOSE",]
+value = 1
+card_class = "UnitCard"
+ability = "TIGHT_BOND"
+
+[[cards]]
+name = "Prince Stennis"
+id = "86"
+filename = "stennis"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = "SPY"
+
+[[cards]]
+name = "Redanian Foot Soldier"
+id = "96"
+filename = "redania"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "CLOSE",]
+value = 1
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Redanian Foot Soldier"
+id = "97"
+filename = "redania_1"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "CLOSE",]
+value = 1
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Sheldon Skaggs"
+id = "91"
+filename = "sheldon"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "RANGED",]
+value = 4
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Siege Tower"
+id = "81"
+filename = "siege_tower"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "SIEGE",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Siegfried of Denesle"
+id = "83"
+filename = "siegfried"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Sigismund Dijkstra"
+id = "89"
+filename = "dijkstra"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = "SPY"
+
+[[cards]]
+name = "Síle de Tansarville"
+id = "85"
+filename = "sheala"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "RANGED",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Thaler"
+id = "94"
+filename = "thaler"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "SIEGE",]
+value = 1
+card_class = "UnitCard"
+ability = "SPY"
+
+[[cards]]
+name = "Sabrina Glevissig"
+id = "90"
+filename = "sabrina"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "RANGED",]
+value = 4
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Vernon Roche"
+id = "9"
+filename = "vernon"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "CLOSE",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Ves"
+id = "82"
+filename = "ves"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Yarpen Zigrin"
+id = "93"
+filename = "yarpen"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "CLOSE",]
+value = 2
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Trebuchet"
+id = "77"
+filename = "trebuchet"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "SIEGE",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Trebuchet"
+id = "78"
+filename = "trebuchet_1"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "SIEGE",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Emhyr var Emreis - His Imperial Majesty"
+id = "1"
+filename = "emhyr_silver"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "EMHYR_IMPERIAL"
+
+[[cards]]
+name = "Emhyr var Emreis - Emperor of Nilfgaard"
+id = "2"
+filename = "emhyr_copper"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "EMHYR_EMPEROR"
+
+[[cards]]
+name = "Emhyr var Emreis - the White Flame"
+id = "3"
+filename = "emhyr_bronze"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "EMHYR_WHITEFLAME"
+
+[[cards]]
+name = "Emhyr var Emreis - The Relentless"
+id = "4"
+filename = "emhyr_gold"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "EMHYR_RELENTLESS"
+
+[[cards]]
+name = "Emhyr var Emreis - Invader of the North"
+id = ""
+filename = "emhyr_invader_of_the_north"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "EMHYR_INVADER"
+
+[[cards]]
+name = "Albrich"
+id = "68"
+filename = "albrich"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "RANGED",]
+value = 2
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Assire var Anahid"
+id = "52"
+filename = "assire"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "RANGED",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Black Infantry Archer"
+id = "47"
+filename = "black_archer"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "RANGED",]
+value = 10
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Black Infantry Archer"
+id = "48"
+filename = "black_archer_1"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "RANGED",]
+value = 10
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Cahir Mawr Dyffryn aep Ceallach"
+id = "54"
+filename = "cahir"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "CLOSE",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Cynthia"
+id = "60"
+filename = "cynthia"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "RANGED",]
+value = 4
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Etolian Auxiliary Archers"
+id = "72"
+filename = "archer_support"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "RANGED",]
+value = 1
+card_class = "UnitCard"
+ability = "MEDIC"
+
+[[cards]]
+name = "Etolian Auxiliary Archers"
+id = "73"
+filename = "archer_support_1"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "RANGED",]
+value = 1
+card_class = "UnitCard"
+ability = "MEDIC"
+
+[[cards]]
+name = "Fringilla Vigo"
+id = "53"
+filename = "fringilla"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "RANGED",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Heavy Zerrikanian Fire Scorpion"
+id = "49"
+filename = "heavy_zerri"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "SIEGE",]
+value = 10
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Impera Brigade Guard"
+id = "67"
+filename = "imperal_brigade"
+description = ""
+count = 4
+faction = "NILFGAARD"
+row = [ "CLOSE",]
+value = 3
+card_class = "UnitCard"
+ability = "TIGHT_BOND"
+
+[[cards]]
+name = "Letho of Gulet"
+id = "147"
+filename = "letho"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "CLOSE",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Menno Coehoorn"
+id = "148"
+filename = "menno"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "CLOSE",]
+value = 10
+card_class = "HeroCard"
+ability = "MEDIC"
+
+[[cards]]
+name = "Morteisen"
+id = "64"
+filename = "morteisen"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "CLOSE",]
+value = 3
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Morvran Voorhis"
+id = "149"
+filename = "moorvran"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "SIEGE",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Nausicaa Cavalry Rider"
+id = "71"
+filename = "nauzicaa_2"
+description = ""
+count = 3
+faction = "NILFGAARD"
+row = [ "CLOSE",]
+value = 2
+card_class = "UnitCard"
+ability = "TIGHT_BOND"
+
+[[cards]]
+name = "Puttkammer"
+id = "66"
+filename = "puttkammer"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "RANGED",]
+value = 3
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Rainfarn"
+id = "61"
+filename = "rainfarn"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Renuald aep Matsen"
+id = "56"
+filename = "renuald"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "RANGED",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Rotten Mangonel"
+id = "65"
+filename = "rotten"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "SIEGE",]
+value = 3
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Shilard Fitz-Oesterlen"
+id = "51"
+filename = "shilard"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "CLOSE",]
+value = 7
+card_class = "UnitCard"
+ability = "SPY"
+
+[[cards]]
+name = "Siege Engineer"
+id = "55"
+filename = "siege_engineer"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "SIEGE",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Siege Technician"
+id = "74"
+filename = "siege_support"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "SIEGE",]
+value = 0
+card_class = "UnitCard"
+ability = "MEDIC"
+
+[[cards]]
+name = "Stefan Skellen"
+id = "50"
+filename = "stefan"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "CLOSE",]
+value = 9
+card_class = "UnitCard"
+ability = "SPY"
+
+[[cards]]
+name = "Sweers"
+id = "69"
+filename = "sweers"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "RANGED",]
+value = 2
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Tibor Eggebracht"
+id = "150"
+filename = "tibor"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "RANGED",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Vanhemar"
+id = "62"
+filename = "vanhemar"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "RANGED",]
+value = 4
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Vattier de Rideaux"
+id = "63"
+filename = "vattier"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = "SPY"
+
+[[cards]]
+name = "Vreemde"
+id = "70"
+filename = "vreemde"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "CLOSE",]
+value = 2
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Young Emissary"
+id = "58"
+filename = "young_emissary"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = "TIGHT_BOND"
+
+[[cards]]
+name = "Young Emissary"
+id = "59"
+filename = "young_emissary_1"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = "TIGHT_BOND"
+
+[[cards]]
+name = "Zerrikanian Fire Scorpion"
+id = "57"
+filename = "zerri"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "SIEGE",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Eredin - Commander of the Red Riders"
+id = "134"
+filename = "eredin_silver"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "EREDIN_COMMANDER"
+
+[[cards]]
+name = "Eredin - Bringer of Death"
+id = "136"
+filename = "eredin_bronze"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "EREDIN_BRINGER_OF_DEATH"
+
+[[cards]]
+name = "Eredin - Destroyer of Worlds"
+id = "137"
+filename = "eredin_gold"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "EREDIN_DESTROYER"
+
+[[cards]]
+name = "Eredin - King of the Wild Hunt"
+id = "135"
+filename = "eredin_copper"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "EREDIN_KING"
+
+[[cards]]
+name = "Eredin Bréacc Glas - The Treacherous"
+id = ""
+filename = "eredin_the_treacherous"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = []
+value = 0
+card_class = "HeroCard"
+ability = "EREDIN_TREACHEROUS"
+
+[[cards]]
+name = "Arachas "
+id = "27"
+filename = "arachas"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Arachas "
+id = "28"
+filename = "arachas_1"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Arachas "
+id = "29"
+filename = "arachas_2"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Arachas- Behemoth"
+id = "15"
+filename = "arachas_behemoth"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "SIEGE",]
+value = 6
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Botchling"
+id = "26"
+filename = "poroniec"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Celaeno Harpy"
+id = "38"
+filename = "celaeno_harpy"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE", "RANGED",]
+value = 2
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Cockatrice"
+id = "36"
+filename = "cockatrice"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "RANGED",]
+value = 2
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Crone - Brewess"
+id = "16"
+filename = "witch_velen"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 6
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Crone - Weavess"
+id = "17"
+filename = "witch_velen_1"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 6
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Crone - Whispess"
+id = "18"
+filename = "witch_velen_2"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 6
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Draug"
+id = "143"
+filename = "draug"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Earth Elemental"
+id = "12"
+filename = "earth_elemental"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "SIEGE",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Endrega"
+id = "34"
+filename = "endrega"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "RANGED",]
+value = 2
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Fiend"
+id = "13"
+filename = "fiend"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Fire Elemental"
+id = "14"
+filename = "fire_elemental"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "SIEGE",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Foglet"
+id = "39"
+filename = "fogling"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 2
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Forktail"
+id = "19"
+filename = "forktail"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Frightener"
+id = "23"
+filename = "frightener"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Gargoyle"
+id = "37"
+filename = "gargoyle"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "RANGED",]
+value = 2
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Ghoul"
+id = "44"
+filename = "ghoul"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 1
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Ghoul"
+id = "45"
+filename = "ghoul_1"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 1
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Ghoul"
+id = "46"
+filename = "ghoul_2"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 1
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Grave Hag"
+id = "25"
+filename = "gravehag"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "RANGED",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Griffin"
+id = "21"
+filename = "gryffin"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Harpy"
+id = "35"
+filename = "harpy"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE", "RANGED",]
+value = 2
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Ice Giant"
+id = "24"
+filename = "frost_giant"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "SIEGE",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Imlerith"
+id = "144"
+filename = "imlerith"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Kayran"
+id = "146"
+filename = "kayran"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE", "RANGED",]
+value = 8
+card_class = "HeroCard"
+ability = "MORALE_BOOST"
+
+[[cards]]
+name = "Leshen"
+id = "145"
+filename = "leshen"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "RANGED",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Nekker"
+id = "41"
+filename = "nekker"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 2
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Nekker"
+id = "42"
+filename = "nekker_1"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 2
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Nekker"
+id = "43"
+filename = "nekker_2"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 2
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Plague Maiden"
+id = "20"
+filename = "mighty_maiden"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Vampire - Bruxa"
+id = "33"
+filename = "bruxa"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Vampire - Ekimmara"
+id = "30"
+filename = "ekkima"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Vampire - Fleder"
+id = "31"
+filename = "fleder"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Vampire - Garkain"
+id = "32"
+filename = "garkain"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Vampire - Katakan"
+id = ""
+filename = "katakan"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Werewolf"
+id = "22"
+filename = "werewolf"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Wyvern"
+id = "40"
+filename = "wyvern"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "RANGED",]
+value = 2
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Toad"
+id = ""
+filename = "toad"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "RANGED",]
+value = 7
+card_class = "UnitCard"
+ability = "SCORCH"
+
+[[cards]]
+name = "Francesca Findabair - Queen of Dol Blathanna"
+id = "13"
+filename = "francesca_silver"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "FRANCESCA_QUEEN"
+
+[[cards]]
+name = "Francesca Findabair - the Beautiful"
+id = "14"
+filename = "francesca_gold"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "FRANCESCA_BEAUTIFUL"
+
+[[cards]]
+name = "Francesca Findabair - Daisy of the Valley"
+id = "15"
+filename = "francesca_copper"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "FRANCESCA_DAISY"
+
+[[cards]]
+name = "Francesca Findabair - Pureblood Elf"
+id = "16"
+filename = "francesca_bronze"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "FRANCESCA_PUREBLOOD"
+
+[[cards]]
+name = "Francesca Findabair - Hope of the Aen Seidhe"
+id = ""
+filename = "francesca_hope_of_the_aen_seidhe"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "FRANCESCA_HOPE"
+
+[[cards]]
+name = "Ciaran aep Easnillien"
+id = "122"
+filename = "ciaran"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE", "RANGED",]
+value = 3
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Barclay Els"
+id = "106"
+filename = "barclay"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE", "RANGED",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Dennis Cranmer"
+id = "102"
+filename = "dennis"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Dol Blathanna Archer"
+id = "121"
+filename = "dol_archer"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "RANGED",]
+value = 4
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Dol Blathanna Scout"
+id = "107"
+filename = "dol_infantry"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE", "RANGED",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Dol Blathanna Scout"
+id = "108"
+filename = "dol_infantry_1"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE", "RANGED",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Dol Blathanna Scout"
+id = "109"
+filename = "dol_infantry_2"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE", "RANGED",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Dwarven Skirmisher"
+id = "123"
+filename = "dwarf"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE",]
+value = 3
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Dwarven Skirmisher"
+id = "124"
+filename = "dwarf_1"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE",]
+value = 3
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Dwarven Skirmisher"
+id = "125"
+filename = "dwarf_2"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE",]
+value = 3
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Eithné"
+id = "17"
+filename = "eithne"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "RANGED",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Elven Skirmisher"
+id = "127"
+filename = "elf_skirmisher"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "RANGED",]
+value = 2
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Elven Skirmisher"
+id = "128"
+filename = "elf_skirmisher_1"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "RANGED",]
+value = 2
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Elven Skirmisher"
+id = "129"
+filename = "elf_skirmisher_2"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "RANGED",]
+value = 2
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Filavandrel aen Fidhail"
+id = "104"
+filename = "filavandrel"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE", "RANGED",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Havekar Healer"
+id = "131"
+filename = "havekar_nurse"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "RANGED",]
+value = 0
+card_class = "UnitCard"
+ability = "MEDIC"
+
+[[cards]]
+name = "Havekar Healer"
+id = "132"
+filename = "havekar_nurse_1"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "RANGED",]
+value = 0
+card_class = "UnitCard"
+ability = "MEDIC"
+
+[[cards]]
+name = "Havekar Healer"
+id = "133"
+filename = "havekar_nurse_2"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "RANGED",]
+value = 0
+card_class = "UnitCard"
+ability = "MEDIC"
+
+[[cards]]
+name = "Havekar Smuggler"
+id = "110"
+filename = "havekar_support"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Havekar Smuggler"
+id = "111"
+filename = "havekar_support_1"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Havekar Smuggler"
+id = "112"
+filename = "havekar_support_2"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Ida Emean aep Sivney"
+id = "103"
+filename = "ida"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "RANGED",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Iorveth"
+id = "20"
+filename = "iorveth"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "RANGED",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Isengrim Faoiltiarna"
+id = "19"
+filename = "isengrim"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE",]
+value = 10
+card_class = "HeroCard"
+ability = "MORALE_BOOST"
+
+[[cards]]
+name = "Mahakaman Defender"
+id = "115"
+filename = "mahakam"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Mahakaman Defender"
+id = "116"
+filename = "mahakam_1"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Mahakaman Defender"
+id = "117"
+filename = "mahakam_2"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Mahakaman Defender"
+id = "118"
+filename = "mahakam_3"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Mahakaman Defender"
+id = "119"
+filename = "mahakam_4"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Milva"
+id = "101"
+filename = "milva"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "RANGED",]
+value = 10
+card_class = "UnitCard"
+ability = "MORALE_BOOST"
+
+[[cards]]
+name = "Riordain"
+id = "130"
+filename = "riordain"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "RANGED",]
+value = 1
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Saesenthessis"
+id = "18"
+filename = "saskia"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "RANGED",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Toruviel"
+id = "126"
+filename = "toruviel"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "RANGED",]
+value = 2
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Vrihedd Brigade Recruit"
+id = "120"
+filename = "vrihedd_cadet"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "RANGED",]
+value = 4
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Vrihedd Brigade Veteran"
+id = "113"
+filename = "vrihedd_brigade"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE", "RANGED",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Vrihedd Brigade Veteran"
+id = "114"
+filename = "vrihedd_brigade_1"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE", "RANGED",]
+value = 5
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Yaevinn"
+id = "105"
+filename = "yaevinn"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE", "RANGED",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Berserker"
+id = ""
+filename = "berserker"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = "BERSERKER"
+
+[[cards]]
+name = "Birna Bran"
+id = ""
+filename = "birna"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "CLOSE",]
+value = 2
+card_class = "UnitCard"
+ability = "MEDIC"
+
+[[cards]]
+name = "Blueboy Lugos"
+id = ""
+filename = "blueboy"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "CLOSE",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Cerys"
+id = ""
+filename = "cerys"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "CLOSE",]
+value = 10
+card_class = "HeroCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Clan Brokva Archer"
+id = ""
+filename = "brokva_archer"
+description = ""
+count = 2
+faction = "SKELLIGE"
+row = [ "RANGED",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Clan Dimun Pirate"
+id = ""
+filename = "dimun_pirate"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "RANGED",]
+value = 6
+card_class = "UnitCard"
+ability = "SCORCH"
+
+[[cards]]
+name = "Cerys - Clan Drummond Shield Maiden"
+id = ""
+filename = "shield_maiden"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = "TIGHT_BOND"
+
+[[cards]]
+name = "Cerys - Clan Drummond Shield Maiden"
+id = ""
+filename = "shield_maiden_1"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = "TIGHT_BOND"
+
+[[cards]]
+name = "Cerys - Clan Drummond Shield Maiden"
+id = ""
+filename = "shield_maiden_2"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = "TIGHT_BOND"
+
+[[cards]]
+name = "Clan Heymaey Skald"
+id = ""
+filename = "heymaey"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Clan Tordarroch Armorsmith"
+id = ""
+filename = "tordarroch"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Clan an Craite Warrior"
+id = ""
+filename = "craite_warrior"
+description = ""
+count = 3
+faction = "SKELLIGE"
+row = [ "CLOSE",]
+value = 6
+card_class = "UnitCard"
+ability = "TIGHT_BOND"
+
+[[cards]]
+name = "Donar an Hindar"
+id = ""
+filename = "donar"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Draig Bon-Dhu"
+id = ""
+filename = "draig"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "SIEGE",]
+value = 2
+card_class = "UnitCard"
+ability = "HORN"
+
+[[cards]]
+name = "Ermion"
+id = ""
+filename = "ermion"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "RANGED",]
+value = 8
+card_class = "HeroCard"
+ability = "MADROEME"
+
+[[cards]]
+name = "Hemdall"
+id = ""
+filename = "hemdall"
+description = ""
+count = 0
+faction = "SKELLIGE"
+row = [ "CLOSE",]
+value = 11
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Hjalmar"
+id = ""
+filename = "hjalmar"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "RANGED",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Holger Blackhand"
+id = ""
+filename = "holger"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "SIEGE",]
+value = 4
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Kambi"
+id = ""
+filename = "kambi"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "CLOSE",]
+value = 0
+card_class = "UnitCard"
+ability = "AVENGER_KAMBI"
+
+[[cards]]
+name = "Light Longship"
+id = ""
+filename = "light_longship"
+description = ""
+count = 3
+faction = "SKELLIGE"
+row = [ "RANGED",]
+value = 4
+card_class = "UnitCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Madman Lugos"
+id = ""
+filename = "madmad_lugos"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "CLOSE",]
+value = 6
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Mardroeme"
+id = ""
+filename = "mardroeme"
+description = ""
+count = 3
+card_class = "SpecialCard"
+special_type = "MADROEME"
+
+[[cards]]
+name = "Olaf"
+id = ""
+filename = "olaf"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "CLOSE", "RANGED",]
+value = 12
+card_class = "UnitCard"
+ability = "MORALE_BOOST"
+
+[[cards]]
+name = "Skellige Storm"
+id = ""
+filename = "storm"
+description = ""
+count = 3
+card_class = "WeatherCard"
+weather_type = "SKELLIGE_STORM"
+
+[[cards]]
+name = "Svanrige"
+id = ""
+filename = "svanrige"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "Transformed Vildkaarl"
+id = ""
+filename = "vildkaarl"
+description = ""
+count = 0
+faction = "SKELLIGE"
+row = [ "CLOSE",]
+value = 14
+card_class = "UnitCard"
+ability = "MORALE_BOOST"
+
+[[cards]]
+name = "Transformed Young Vildkaarl"
+id = ""
+filename = "young_vildkaarl"
+description = ""
+count = 0
+faction = "SKELLIGE"
+row = [ "RANGED",]
+value = 8
+card_class = "UnitCard"
+ability = "TIGHT_BOND"
+
+[[cards]]
+name = "Udalryk"
+id = ""
+filename = "udalryk"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "CLOSE",]
+value = 4
+card_class = "UnitCard"
+ability = ""
+
+[[cards]]
+name = "War Longship"
+id = ""
+filename = "war_longship"
+description = ""
+count = 2
+faction = "SKELLIGE"
+row = [ "SIEGE",]
+value = 6
+card_class = "UnitCard"
+ability = "TIGHT_BOND"
+
+[[cards]]
+name = "Young Berserker"
+id = ""
+filename = "young_berserker"
+description = ""
+count = 3
+faction = "SKELLIGE"
+row = [ "RANGED",]
+value = 2
+card_class = "UnitCard"
+ability = "BERSERKER"
+
+[[cards]]
+name = "Crach an Craite"
+id = ""
+filename = "crach_an_craite"
+description = ""
+count = 0
+faction = "SKELLIGE"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "CRACH_AN_CRAITE"
+
+[[cards]]
+name = "King Bran"
+id = ""
+filename = "king_bran"
+description = ""
+count = 0
+faction = "SKELLIGE"
+row = []
+value = 0
+card_class = "UnitCard"
+ability = "KING_BRAN"
+
+[[cards]]
+name = "Schirru"
+id = ""
+filename = "schirru"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "SIEGE",]
+value = 8
+card_class = "UnitCard"
+ability = "SCORCH"
+
