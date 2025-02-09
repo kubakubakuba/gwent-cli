@@ -23,5 +23,11 @@ class Deck:
 	def discard_card(self, card: str):
 		self.graveyard.append(card)
 	
+	def get_hand(self) -> List[str]:
+		return self.hand
+	
+	def get_graveyard(self) -> List[str]:
+		return self.graveyard
+	
 
 		
