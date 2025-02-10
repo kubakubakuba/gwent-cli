@@ -12,6 +12,13 @@ class CombatRow(Enum):
 	RANGED = 1
 	SIEGE = 2
 
+WeatherEffect = {
+	Weather.CLEAR: None,
+	Weather.FROST: CombatRow.CLOSE,
+	Weather.FOG: CombatRow.RANGED,
+	Weather.RAIN: CombatRow.SIEGE,
+	Weather.SKELLIGE_STORM: CombatRow.CLOSE
+}
 class Faction(Enum):
 	ANY = -1
 	NILFGAARD = 0

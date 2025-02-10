@@ -70,8 +70,8 @@ class HumanController(PlayerController):
         self.action_taken = True
         self._action_event.set()
 
-    async def play(self, card: str):
-        if self.get_hand().count(card) == 0 or self.get_skiped_move():
+    async def play(self, board: Board):
+        if len(self.get_hand()) == 0 or self.get_skiped_move():
             return
         self.action_taken = False
         await self._action_event.wait()
