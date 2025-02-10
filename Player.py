@@ -2,6 +2,8 @@ import asyncio
 from Deck import Deck
 from typing import List
 from abc import ABC, abstractmethod
+from CardLoader import CardLoader
+from Card import UnitCard, Weather
 
 INITIAL_LIVES = 2
 
@@ -59,6 +61,25 @@ class PlayerController(ABC):
     def get_skiped_move(self):
         return self.skiped_move
     
+    def play_card(self, card: str, board: Board):
+        self.state.play_card(card)
+        card_obj = CardLoader.get_card_by_id(card)
+        # test if card is a unit card
+        if issubclass(type(card_obj), UnitCard):
+            BoardView.getCardPositionFrom(card_obj.row)
+        
+        if issubclass(type(card_obj), WeatherCard):
+            board.play_weather(card_obj.type)
+        if issubclass(type(card_obj), SpecialCard):
+            if card_obj.type == Special.COMMANDERS_HORN:
+                board.play_commanders_horn()
+            if card_obj.type == Special.DECOY:
+                board.play_decoy()
+            if card_obj.type == Special.SCORCH:
+                board.play_scorch()
+            if card_obj.type == Special.MADROEME:
+                board.play_madroeme()
+        
 
 class HumanController(PlayerController):
     def __init__(self, state: PlayerState):
@@ -70,8 +91,8 @@ class HumanController(PlayerController):
         self.action_taken = True
         self._action_event.set()
 
-    async def play(self, board: Board):
-        if len(self.get_hand()) == 0 or self.get_skiped_move():
+    async def play(self, card: str):
+        if self.get_hand().count(card) == 0 or self.get_skiped_move():
             return
         self.action_taken = False
         await self._action_event.wait()
