@@ -30,6 +30,7 @@ class BoardView:
         self.player1 = None
         self.player2 = None
         self.current_line = 0  # Add line tracker
+        self.pad = None  # Add pad for double buffering
         
         # Initialize configuration
         self.config = self.DEFAULT_CONFIG.copy()
@@ -61,8 +62,14 @@ class BoardView:
         
         curses.mousemask(curses.ALL_MOUSE_EVENTS | curses.REPORT_MOUSE_POSITION)
         curses.mouseinterval(0)
+        
+        # Create pad slightly larger than screen
+        self.pad = curses.newpad(self.max_y + 1, self.max_x + 1)
+        self.pad.keypad(True)
 
     def end_curses(self):
+        if self.pad:
+            del self.pad
         curses.nocbreak()
         self.stdscr.keypad(False)
         curses.echo()
@@ -81,7 +88,7 @@ class BoardView:
             self.opponent_score = opponent_score
             self.is_player_turn = is_player_turn
             
-            self.stdscr.clear()
+            self.pad.clear()  # Clear pad instead of screen
             
             # Calculate game area width and log area width
             game_area_width = self.max_x - self.config['log_width'] - 3  # -3 for borders and separator
@@ -141,7 +148,7 @@ class BoardView:
             # Draw bottom frame
             self.safe_addstr(self.max_y-1, 0, "+" + "-" * (game_area_width) + "+")
             
-            self.stdscr.refresh()
+            self.refresh_screen()  # Single refresh at the end
             
         except curses.error:
             pass  # Ignore curses errors from writing outside window
@@ -152,7 +159,14 @@ class BoardView:
             if y < self.max_y and x < self.max_x:
                 remaining_space = self.max_x - x - 1
                 if remaining_space > 0:
-                    self.stdscr.addstr(y, x, string[:remaining_space], color_pair)
+                    self.pad.addstr(y, x, string[:remaining_space], color_pair)
+        except curses.error:
+            pass
+
+    def refresh_screen(self):
+        """Refresh the screen using the pad"""
+        try:
+            self.pad.refresh(0, 0, 0, 0, self.max_y - 1, self.max_x - 1)
         except curses.error:
             pass
 
@@ -281,19 +295,19 @@ class BoardView:
                 self.safe_addstr(start_line + 1, x_pos, "╔" + "═" * width + "╗")
                 for y in range(2, 6):
                     # Replace first and last char of each line with hero border
-                    self.stdscr.addch(start_line + y, x_pos, "║")
-                    self.stdscr.addch(start_line + y, x_pos + width + 1, "║")
+                    self.pad.addch(start_line + y, x_pos, "║")
+                    self.pad.addch(start_line + y, x_pos + width + 1, "║")
                 self.safe_addstr(start_line + 6, x_pos, "╚" + "═" * width + "╝")
             
             # Apply colors after drawing full card
             if is_hero:
                 for y in range(start_line + 1, start_line + 7):
-                    self.stdscr.chgat(y, x_pos, border_width, curses.color_pair(2))
+                    self.pad.chgat(y, x_pos, border_width, curses.color_pair(2))
             
             # Highlight selected card
             if i + self.hand_offset == self.hand_selected:
                 for y in range(start_line + 1, start_line + 7):
-                    self.stdscr.chgat(y, x_pos, border_width, curses.color_pair(1))
+                    self.pad.chgat(y, x_pos, border_width, curses.color_pair(1))
         
         if len(hand) > self.config['max_visible_cards']:
             self.safe_addstr(start_line + 7, 4, "Use <- -> to scroll")
@@ -301,10 +315,10 @@ class BoardView:
     def get_user_card_choice(self, hand):
         """Get card choice using mouse or keyboard, two-step: select then confirm"""
         self.safe_addstr(self.max_y-2, 2, "Select card: ←→ to move, Enter to confirm, P to pass turn, ESC to cancel")
-        self.stdscr.refresh()
+        self.refresh_screen()
         
         while True:
-            event = self.stdscr.getch()
+            event = self.pad.getch()
             
             if event == 27:  # ESC
                 return None
@@ -387,12 +401,12 @@ class BoardView:
         # Show available rows with shortcuts
         options = [f"{r[0]}({r.lower()})" for r in valid_rows]
         self.safe_addstr(self.max_y-2, 2, f"Choose row [{'/'.join(options)}]: ")
-        self.stdscr.refresh()
+        self.refresh_screen()
         
         while True:
             try:
                 # Get single character instead of string
-                key = self.stdscr.getch()
+                key = self.pad.getch()
                 
                 # Check if key is a valid shortcut
                 if key in row_map:
@@ -404,7 +418,7 @@ class BoardView:
                 if 32 <= key <= 126:  # Printable characters
                     self.safe_addstr(self.max_y-2, 2, " " * (self.max_x - 4))
                     self.safe_addstr(self.max_y-2, 2, f"Invalid choice! Choose [{'/'.join(options)}]: ")
-                    self.stdscr.refresh()
+                    self.refresh_screen()
                 
             except:
                 continue
@@ -426,10 +440,10 @@ class BoardView:
                 card_str += f" [{row_str}]"
             self.safe_addstr(y_pos + idx, 4, card_str)
             
-        self.stdscr.refresh()
+        self.refresh_screen()
         
         while True:
-            event = self.stdscr.getch()
+            event = self.pad.getch()
             if event == 27:  # ESC
                 return None
             elif event in [ord(str(i)) for i in range(1, len(revivable_cards) + 1)]:
