@@ -27,43 +27,46 @@ class GwentGame:
     def run(self):
         try:
             self.view.init_curses()
+            
+            # Initial board draw
+            self.view.draw_board(self.board, 0, 0, self.is_player_turn, self.human.hand)
+            
             while self.running:
                 try:
                     player_score = self.board.get_player_value()
                     opponent_score = self.board.get_enemy_value()
-                    self.view.draw_board(self.board, player_score, opponent_score, 
-                                       self.is_player_turn, self.human.hand)
-
+                    
                     if self.is_player_turn:
+                        # Draw before getting input
+                        self.view.draw_board(self.board, player_score, opponent_score, 
+                                           self.is_player_turn, self.human.hand)
                         card, row = self.human.play_card(self.view)
                         if card:
                             self.board.add_card_to_row(card, True, row or "CLOSE")
                             self.view.log.append(f"Player played {card.name}")
                             self.is_player_turn = False
-                        self.view.draw_board(self.board, player_score, opponent_score, 
-                                           self.is_player_turn, self.human.hand)
                     else:
-                        # Add delay for AI turn
                         curses.napms(1000)  # 1 second delay
                         card, row = self.ai.play_card(self.view)
                         if card:
                             self.board.add_card_to_row(card, False, row or "CLOSE")
                             self.view.log.append(f"Opponent played {card.name}")
                             self.is_player_turn = True
-                        self.view.draw_board(self.board, player_score, opponent_score, 
-                                           self.is_player_turn, self.human.hand)
-
+                    
+                    # Always redraw after any action
+                    self.view.draw_board(self.board, player_score, opponent_score, 
+                                       self.is_player_turn, self.human.hand)
+                    
                     # Check end conditions
                     if not self.human.hand and not self.ai.hand:
                         self.running = False
+                        break
                     
-                    # Add delay to make the game playable
-                    self.view.stdscr.timeout(100)  # 100ms delay
+                    # Handle input with timeout
+                    self.view.stdscr.timeout(100)
                     key = self.view.stdscr.getch()
-                    
-                    # Handle window resize
                     if key == curses.KEY_RESIZE:
-                        self.view.max_y, self.view.max_x = self.view.stdscr.getmaxyx()
+                        self.view.max_y, self.max_x = self.view.stdscr.getmaxyx()
                         
                 except curses.error:
                     continue
@@ -72,7 +75,10 @@ class GwentGame:
             self.view.end_curses()
             print(f"Error: {str(e)}")
         finally:
-            self.view.end_curses()
+            try:
+                self.view.end_curses()
+            except:
+                pass  # Ignore errors during cleanup
             winner = "Player" if player_score >= opponent_score else "Opponent"
             print(f"Game Over! Winner: {winner}")
 

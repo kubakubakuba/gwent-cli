@@ -1,6 +1,6 @@
 import curses
 from typing import List
-from Card import AbstractCard
+from Card import AbstractCard, Ability
 
 class BoardView:
     def __init__(self):
@@ -11,6 +11,11 @@ class BoardView:
         self.max_x = 0
         self.command_line = ""
         self.hand_selected = 0  # Currently selected card in hand
+        self.board = None
+        self.player_score = 0
+        self.opponent_score = 0
+        self.is_player_turn = True
+        self.weather = []  # Default weather state
 
     def init_curses(self):
         self.stdscr = curses.initscr()
@@ -37,6 +42,12 @@ class BoardView:
 
     def draw_board(self, board, player_score, opponent_score, is_player_turn, player_hand: List[AbstractCard]):
         try:
+            # Store the board reference and scores
+            self.board = board
+            self.player_score = player_score
+            self.opponent_score = opponent_score
+            self.is_player_turn = is_player_turn
+            
             self.stdscr.clear()
             
             # Draw frame
@@ -47,7 +58,7 @@ class BoardView:
             self.safe_addstr(1, (self.max_x - len(title)) // 2, title)
             
             # Weather and turn info
-            weather_str = ", ".join([w.name for w in board.weather]) or "Clear"
+            weather_str = ", ".join([w.name for w in (board.weather if board else [])]) or "Clear"
             self.safe_addstr(2, 2, f"Weather: [{weather_str}]")
             turn_str = "Player" if is_player_turn else "Opponent"
             self.safe_addstr(2, self.max_x - 20, f"Turn: {turn_str}")
@@ -104,6 +115,10 @@ class BoardView:
     def draw_hand(self, start_line: int, hand: List[AbstractCard]):
         if start_line >= self.max_y - 3:
             return
+        
+        # Clear the hand area first
+        for y in range(start_line, start_line + 8):  # Height of card display + scroll message
+            self.safe_addstr(y, 2, " " * (self.max_x - 4))  # Clear the line
             
         self.safe_addstr(start_line, 2, "Your Hand:")
         if not hand:
@@ -111,11 +126,45 @@ class BoardView:
             return
             
         visible_cards = hand[self.hand_offset:self.hand_offset + 5]
-        card_str = " ".join(f"[{i+self.hand_offset}:{card.name[:8]}]" for i, card in enumerate(visible_cards))
-        self.safe_addstr(start_line + 1, 4, card_str)
+        for i, card in enumerate(visible_cards):
+            x_pos = 4 + i * 16  # Increased spacing between cards
+            
+            # Draw card box
+            self.safe_addstr(start_line + 1, x_pos, "+----------+")
+            self.safe_addstr(start_line + 2, x_pos, f"|{card.name[:8]:<8} |")
+            
+            # Show value for unit cards
+            if hasattr(card, 'value'):
+                self.safe_addstr(start_line + 3, x_pos, f"|Val: {card.value:<4} |")
+            else:
+                self.safe_addstr(start_line + 3, x_pos, "|         |")
+            
+            # Show rows for unit cards
+            if hasattr(card, 'row') and card.row:
+                row_str = '/'.join(r.name[:1] for r in card.row)  # C/R/S for Close/Ranged/Siege
+                self.safe_addstr(start_line + 4, x_pos, f"|Row:{row_str:<5} |")
+            else:
+                self.safe_addstr(start_line + 4, x_pos, "|         |")
+            
+            # Show ability if present
+            if hasattr(card, 'ability') and card.ability and card.ability != Ability.NONE:
+                ability_str = card.ability.name[:8]
+                self.safe_addstr(start_line + 5, x_pos, f"|{ability_str:<9}|")
+            elif hasattr(card, 'type'):  # For weather/special cards
+                type_str = card.type.name[:8]
+                self.safe_addstr(start_line + 5, x_pos, f"|{type_str:<9}|")
+            else:
+                self.safe_addstr(start_line + 5, x_pos, "|         |")
+                
+            self.safe_addstr(start_line + 6, x_pos, "+----------+")
+            
+            # Highlight selected card
+            if i + self.hand_offset == self.hand_selected:
+                for y in range(start_line + 1, start_line + 7):
+                    self.stdscr.chgat(y, x_pos, 11, curses.color_pair(1))
         
         if len(hand) > 5:
-            self.safe_addstr(start_line + 2, 4, "Use <- -> to scroll")
+            self.safe_addstr(start_line + 7, 4, "Use <- -> to scroll")
 
     def get_user_card_choice(self, hand):
         """Get card choice using mouse or keyboard"""
@@ -130,34 +179,40 @@ class BoardView:
                 
             if event == curses.KEY_MOUSE:
                 try:
-                    _, mx, my, _, _ = curses.getmouse()
+                    _, mx, my, _, bstate = curses.getmouse()
                     # Check if click is in hand area
-                    if my == self.max_y-4:  # Hand row
+                    y_start = 24  # Start of hand area
+                    if y_start + 1 <= my <= y_start + 6:  # Height of card box
                         for i, card in enumerate(hand[self.hand_offset:self.hand_offset + 5]):
-                            card_x = 4 + i * 12  # Approximate card width
-                            if card_x <= mx < card_x + 11:
-                                return i + self.hand_offset
+                            card_x = 4 + i * 16  # Card spacing
+                            if card_x <= mx < card_x + 11:  # Card width
+                                self.hand_selected = i + self.hand_offset
+                                # Immediately return the selected card on click
+                                return self.hand_selected
                 except:
                     pass
+                    
+            elif event == 10:  # Enter key
+                return self.hand_selected
                     
             elif event in [ord(str(i)) for i in range(10)]:
                 index = int(chr(event))
                 if 0 <= index < len(hand):
-                    return index
-                    
-            elif event == curses.KEY_ENTER or event == 10:
-                if 0 <= self.hand_selected < len(hand):
-                    return self.hand_selected
+                    self.hand_selected = index
+                    self.draw_board(self.board, self.player_score, self.opponent_score, 
+                                  self.is_player_turn, hand)
 
             elif event == curses.KEY_LEFT:
                 if self.hand_offset > 0:
                     self.hand_offset -= 1
-                    self.draw_hand(self.max_y-4, hand)
+                    self.draw_board(self.board, self.player_score, self.opponent_score, 
+                                  self.is_player_turn, hand)
                     
             elif event == curses.KEY_RIGHT:
                 if self.hand_offset + 5 < len(hand):
                     self.hand_offset += 1
-                    self.draw_hand(self.max_y-4, hand)
+                    self.draw_board(self.board, self.player_score, self.opponent_score, 
+                                  self.is_player_turn, hand)
 
     def get_user_row_choice(self, card):
         """Get row choice based on card's valid rows"""

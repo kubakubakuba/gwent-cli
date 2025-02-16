@@ -55,10 +55,13 @@ class CardLoader:
                                     "muster": "MUSTER",
                                     "morale": "MORALE_BOOST",
                                     "scorch": "SCORCH",
-                                    "": "NONE"
                                 }
-                                value = ability_map.get(value.lower(), "NONE")
-                                value = Ability[value]
+                                if not value:  # Empty string or None
+                                    value = None
+                                else:
+                                    value = ability_map.get(value.lower(), None)
+                                    if value:
+                                        value = Ability[value]
                             elif key == "row" and value:
                                 if isinstance(value, list):
                                     value = [CombatRow[r] for r in value]
