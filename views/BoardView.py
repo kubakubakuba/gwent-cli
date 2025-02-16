@@ -31,6 +31,7 @@ class BoardView:
         self.player2 = None
         self.current_line = 0  # Add line tracker
         self.pad = None  # Add pad for double buffering
+        self.screen_too_small = False  # Add flag for screen size warning
         
         # Initialize configuration
         self.config = self.DEFAULT_CONFIG.copy()
@@ -56,12 +57,8 @@ class BoardView:
         
         self.max_y, self.max_x = self.stdscr.getmaxyx()
         
-        if self.max_y < 30 or self.max_x < 80:
-            self.end_curses()
-            raise RuntimeError("Terminal window too small. Minimum size: 80x30\nPlease use a monospace font.")
-        
-        curses.mousemask(curses.ALL_MOUSE_EVENTS | curses.REPORT_MOUSE_POSITION)
-        curses.mouseinterval(0)
+        # Check screen size but don't crash
+        self.screen_too_small = (self.max_y < 30 or self.max_x < 80)
         
         # Create pad slightly larger than screen
         self.pad = curses.newpad(self.max_y + 1, self.max_x + 1)
@@ -82,6 +79,28 @@ class BoardView:
 
     def draw_board(self, board, player_score, opponent_score, is_player_turn, player_hand: List[AbstractCard]):
         try:
+            if self.screen_too_small:
+                self.pad.clear()
+                warning = "Terminal window too small. Minimum size: 80x30"
+                size_info = f"Current size: {self.max_x}x{self.max_y}"
+                self.safe_addstr(0, 0, warning)
+                self.safe_addstr(1, 0, size_info)
+                self.safe_addstr(3, 0, "Press any key to try again or q to quit")
+                self.refresh_screen()
+                
+                key = self.pad.getch()
+                if key in [ord('q'), ord('Q')]:
+                    raise KeyboardInterrupt
+                    
+                # Check if window has been resized
+                self.max_y, self.max_x = self.stdscr.getmaxyx()
+                self.screen_too_small = (self.max_y < 30 or self.max_x < 80)
+                if not self.screen_too_small:
+                    # Recreate pad with new size
+                    self.pad = curses.newpad(self.max_y + 1, self.max_x + 1)
+                    self.pad.keypad(True)
+                return
+            
             # Store the board reference and scores
             self.board = board
             self.player_score = player_score
