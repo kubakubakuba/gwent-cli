@@ -30,5 +30,9 @@ class Deck:
     
     def get_graveyard(self) -> List[str]:
         return self.graveyard
+    
+    def graveyard_remove(self, index: int):
+        """Remove and return card from graveyard at given index"""
+        return self.graveyard.pop(index)
 
 

@@ -11,9 +11,32 @@ class Board:
         self.player_passed = False
         self.enemy_passed = False
         self._enemy_hand_reference = None  # Initialize reference in __init__
+        self.player_graveyard = []  # Add tracking for graveyards
+        self.enemy_graveyard = []
+        self.player_controller = None
+        self.enemy_controller = None
+
+    def set_controllers(self, player_controller, enemy_controller):
+        self.player_controller = player_controller
+        self.enemy_controller = enemy_controller
+
+    def kill_card(self, card: AbstractCard, is_player: bool):
+        """Kill a card and add it to appropriate graveyard"""
+        if is_player:
+            self.player_controller.add_to_graveyard(card)
+        else:
+            self.enemy_controller.add_to_graveyard(card)
 
     def clear_board(self):
         """Clear the battlefield for next round"""
+        # Add cards to graveyards before clearing
+        for row in self.player:
+            for card in self.player[row]:
+                self.kill_card(card, True)
+        for row in self.enemy:
+            for card in self.enemy[row]:
+                self.kill_card(card, False)
+            
         rows = self.player.keys()
         self.player = {row: [] for row in rows}
         self.enemy = {row: [] for row in rows}
@@ -95,6 +118,7 @@ class Board:
     def destroy_strongest_card(self):
 
         players = [self.player, self.enemy]
+        is_players = [True, False]
 
         # get largest value
         largest = 0
@@ -105,17 +129,19 @@ class Board:
                         if card.value > largest:
                             largest = card.value
 
-        # remove cards with largest value
-        for player in players:
+        # remove cards with largest value and add to graveyard
+        for player, is_player in zip(players, is_players):
             for row in player:
                 for card in player[row]:
                     if issubclass(type(card), UnitCard):
                         if card.value == largest:
                             player[row].remove(card)
+                            self.kill_card(card, is_player)
                             break
     
     def destroy_strongest_card_in_row(self, is_player, row):
         player = self.player if is_player else self.enemy
+        graveyard = self.player_graveyard if is_player else self.enemy_graveyard
         largest = 0
         for card in player[row]:
             if issubclass(type(card), UnitCard):
@@ -126,6 +152,7 @@ class Board:
             if issubclass(type(card), UnitCard):
                 if card.value == largest:
                     player[row].remove(card)
+                    self.kill_card(card, is_player)
                     break
 
     def get_enemy_hand(self) -> List[AbstractCard]:
@@ -135,4 +162,10 @@ class Board:
     def set_enemy_hand(self, hand: List[AbstractCard]):
         """Temporarily store reference to enemy hand for display"""
         self._enemy_hand_reference = hand
+
+    def get_player_graveyard(self) -> List[AbstractCard]:
+        return self.player_graveyard
+
+    def get_enemy_graveyard(self) -> List[AbstractCard]:
+        return self.enemy_graveyard
 

@@ -3,7 +3,7 @@ from model.Deck import Deck
 from typing import List
 from abc import ABC, abstractmethod
 from singleton.CardLoader import CardLoader
-from model.Card import UnitCard, Weather, Special, WeatherCard, SpecialCard, AbstractCard, Ability
+from model.Card import UnitCard, Weather, Special, WeatherCard, SpecialCard, AbstractCard, Ability, HeroCard
 from controledmodel.Board import Board
 
 INITIAL_LIVES = 2  # Define constant here since it's player-related
@@ -87,7 +87,7 @@ class PlayerController(ABC):
                 
         return mustered_cards
 
-    def play_card(self, index: int) -> AbstractCard:
+    def play_card(self, index: int, view=None) -> AbstractCard:
         """Final implementation of card playing - should not be overridden"""
         hand = self.state.get_hand()
         if index >= len(hand):
@@ -100,6 +100,13 @@ class PlayerController(ABC):
         # Handle muster ability if present
         if hasattr(played_card, 'ability') and played_card.ability == Ability.MUSTER:
             return [played_card] + self.handle_muster_ability(played_card)
+        
+        # Handle medic ability
+        if hasattr(played_card, 'ability') and played_card.ability == Ability.MEDIC and view:
+            view.log.append(f"{self.state.name} using medic ability")
+            revived_card = self.handle_medic_ability(view)
+            if revived_card:
+                return [played_card, revived_card]
             
         return played_card
 
@@ -107,6 +114,44 @@ class PlayerController(ABC):
         """Draw 2 cards when spy is played"""
         card_ids = self.state.draw(2)
         return [self.card_loader.get_card_by_id(cid) for cid in card_ids]
+
+    def handle_medic_ability(self, view) -> AbstractCard:
+        """Handle medic ability by allowing resurrection of a card from graveyard"""
+        graveyard = self.get_graveyard()
+        if not graveyard:
+            view.log.append("Graveyard is empty - no cards to revive")
+            return None
+
+        # Filter to only show unit cards that can be revived
+        revivable_cards = [(i, card) for i, card in enumerate(graveyard)
+                          if isinstance(card, UnitCard) and not isinstance(card, HeroCard)]
+
+        if not revivable_cards:
+            view.log.append("No valid cards to revive in graveyard")
+            return None
+            
+        # Let player choose card to revive
+        choice = view.get_graveyard_card_choice(revivable_cards)
+        if choice is None:
+            return None
+            
+        # Get the card ID from graveyard and remove it
+        graveyard_cards = self.state.get_graveyard()
+        card_id = graveyard_cards[choice]
+        self.state.deck.graveyard_remove(choice)  # Remove from deck's graveyard
+        return self.card_loader.get_card_by_id(card_id)
+
+    def add_to_graveyard(self, card: AbstractCard):
+        """Add a card ID to the graveyard"""
+        # Find card ID from the loaded cards
+        for card_id, loaded_card in self.card_loader.cards.items():
+            if loaded_card == card:
+                self.state.discard_card(card_id)
+                break
+
+    def get_graveyard(self) -> List[AbstractCard]:
+        """Get all cards in graveyard as card objects"""
+        return [self.card_loader.get_card_by_id(cid) for cid in self.state.get_graveyard()]
 
     def lose_life(self) -> bool:
         """Make player lose a life and return True if eliminated"""
@@ -174,7 +219,7 @@ class HumanController(PlayerController):
         if choice is None:
             return None, None
             
-        card = self.play_card(choice)
+        card = self.play_card(choice, view)  # Pass view here
         if not card:
             return None, None
             
@@ -201,7 +246,7 @@ class AIController(PlayerController):
         if not self.state.get_hand():
             return None, None
             
-        card = self.play_card(0)  # Play first card
+        card = self.play_card(0, view)  # Pass view here
         if not card:
             return None, None
             

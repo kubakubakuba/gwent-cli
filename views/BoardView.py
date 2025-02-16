@@ -1,5 +1,5 @@
 import curses
-from typing import List
+from typing import List, Optional
 from model.Card import AbstractCard, Ability, HeroCard, UnitCard, WeatherCard, SpecialCard, Weather, Special
 from controller.Player import INITIAL_LIVES  # Import the constant
 
@@ -408,6 +408,34 @@ class BoardView:
                 
             except:
                 continue
+
+    def get_graveyard_card_choice(self, revivable_cards) -> Optional[int]:
+        """Display graveyard cards and get user choice for medic ability"""
+        if not revivable_cards:
+            return None
+            
+        self.safe_addstr(self.max_y-2, 2, "Choose card to revive (ESC to cancel):")
+        
+        # Display revivable cards
+        y_pos = self.max_y-8  # Show above command line
+        for idx, (grave_idx, card) in enumerate(revivable_cards):
+            # Show card info on one line
+            card_str = f"{idx+1}) {card.name} ({card.value})"
+            if hasattr(card, 'row'):
+                row_str = '/'.join(r.name[0] for r in card.row)
+                card_str += f" [{row_str}]"
+            self.safe_addstr(y_pos + idx, 4, card_str)
+            
+        self.stdscr.refresh()
+        
+        while True:
+            event = self.stdscr.getch()
+            if event == 27:  # ESC
+                return None
+            elif event in [ord(str(i)) for i in range(1, len(revivable_cards) + 1)]:
+                choice_idx = int(chr(event)) - 1
+                if 0 <= choice_idx < len(revivable_cards):
+                    return revivable_cards[choice_idx][0]  # Return original graveyard index
 
     def draw_log(self, start_line: int, x_pos: int):
         """Draw game log in right panel"""

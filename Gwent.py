@@ -36,6 +36,9 @@ class GwentGame:
         self.player_score = 0
         self.opponent_score = 0
 
+        # Set up board controllers
+        self.board.set_controllers(self.player1, self.player2)
+
     def create_basic_deck(self) -> List[str]:
         """Create a basic deck with 22 unit cards and 5 special/weather cards"""
         all_cards = self.card_loader.get_all_card_ids()
