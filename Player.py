@@ -116,3 +116,40 @@ class AIController(PlayerController):
         card = hand[0]
         self.state.play_card(card)
         board.play_card(self.state, card)
+
+class HumanController:
+    def __init__(self, hand):
+        self.hand = hand
+
+    def play_card(self, board_view):
+        # Ask user which card to play & which row (if unit/horn). Simplified example:
+        card_index = board_view.get_user_card_choice(self.hand)
+        if card_index is None:
+            return None, None
+        card = self.hand.pop(card_index)
+        row = None
+        if hasattr(card, "row"):  # e.g. UnitCard or HeroCard
+            row = board_view.get_user_row_choice(card)
+        return card, row
+
+    def decide_pass(self):
+        # Example hook for pass logic
+        return False
+
+class AIController:
+    def __init__(self, hand):
+        self.hand = hand
+
+    def play_card(self, board_view):
+        # Simple example: pick first card, random row if needed
+        if not self.hand:
+            return None, None
+        card = self.hand.pop(0)
+        row = None
+        if hasattr(card, "row"):
+            row = "CLOSE"  # or any AI logic
+        return card, row
+
+    def decide_pass(self):
+        # Basic AI pass condition
+        return False

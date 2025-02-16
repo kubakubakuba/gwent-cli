@@ -1,5 +1,4 @@
 from typing import List
-from Card import Card
 import random
 
 class Deck:
