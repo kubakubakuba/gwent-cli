@@ -51,7 +51,7 @@ class BoardView:
         curses.init_pair(2, curses.COLOR_YELLOW, curses.COLOR_BLACK)  # Hero card
         curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_RED)     # Close combat
         curses.init_pair(4, curses.COLOR_WHITE, curses.COLOR_GREEN)   # Ranged
-        curses.init_pair(5, curses.COLOR_WHITE, curses.COLOR_MAGENTA) # Siege
+        curses.init_pair(5, curses.COLOR_BLACK, curses.COLOR_CYAN) # Siege
         
         self.max_y, self.max_x = self.stdscr.getmaxyx()
         
