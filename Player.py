@@ -61,6 +61,32 @@ class PlayerController(ABC):
         """Dynamically convert current hand from IDs to card objects"""
         return [self.card_loader.get_card_by_id(cid) for cid in self.state.get_hand()]
 
+    def handle_muster_ability(self, played_card: AbstractCard) -> List[AbstractCard]:
+        """Handle muster ability by finding and playing all related cards"""
+        if not hasattr(played_card, 'ability') or played_card.ability != Ability.MUSTER:
+            return []
+
+        mustered_cards = []
+        base_name = played_card.name.split(" - ")[0]  # Get prefix before " - " if it exists
+        
+        # Check hand for muster cards
+        hand = self.state.get_hand()
+        for card_id in hand[:]:  # Create copy to avoid modification during iteration
+            card = self.card_loader.get_card_by_id(card_id)
+            if card.name.startswith(base_name) and card.name != played_card.name:
+                self.state.play_card(card_id)
+                mustered_cards.append(card)
+                
+        # Check deck for muster cards
+        deck = self.state.deck.deck  # Access deck directly
+        for card_id in deck[:]:  # Create copy to avoid modification during iteration
+            card = self.card_loader.get_card_by_id(card_id)
+            if card.name.startswith(base_name):
+                deck.remove(card_id)
+                mustered_cards.append(card)
+                
+        return mustered_cards
+
     def play_card(self, index: int) -> AbstractCard:
         """Final implementation of card playing - should not be overridden"""
         hand = self.state.get_hand()
@@ -69,7 +95,13 @@ class PlayerController(ABC):
             
         card_id = hand[index]
         self.state.play_card(card_id)
-        return self.card_loader.get_card_by_id(card_id)
+        played_card = self.card_loader.get_card_by_id(card_id)
+        
+        # Handle muster ability if present
+        if hasattr(played_card, 'ability') and played_card.ability == Ability.MUSTER:
+            return [played_card] + self.handle_muster_ability(played_card)
+            
+        return played_card
 
     def handle_spy_ability(self):
         """Draw 2 cards when spy is played"""

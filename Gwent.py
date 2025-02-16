@@ -171,11 +171,16 @@ class GwentGame:
         # Only try to unpack if it's not a pass
         if isinstance(move_result, tuple):
             card, row = move_result
-            if card:
+            if isinstance(card, list):  # Handle muster cards
+                for muster_card in card:
+                    self.board.add_card_to_row(muster_card, True, row or "CLOSE")
+                    self.view.log.append(f"Player 1 played {muster_card.name}")
+                self.is_player_turn = False
+                self.refresh_display()
+            elif card:
                 self.board.add_card_to_row(card, True, row or "CLOSE")
                 self.view.log.append(f"Player 1 played {card.name}")
                 self.is_player_turn = False
-                # Refresh display after playing card
                 self.refresh_display()
 
     def handle_ai_turn(self):
@@ -189,7 +194,13 @@ class GwentGame:
             
         curses.napms(1000)
         card, row = self.player2.make_move(self.view)
-        if card:
+        if isinstance(card, list):  # Handle muster cards
+            for muster_card in card:
+                self.board.add_card_to_row(muster_card, False, row or "CLOSE")
+                self.view.log.append(f"Player 2 played {muster_card.name}")
+            self.is_player_turn = True
+            self.refresh_display()
+        elif card:
             self.board.add_card_to_row(card, False, row or "CLOSE")
             self.view.log.append(f"Player 2 played {card.name}")
             self.is_player_turn = True
