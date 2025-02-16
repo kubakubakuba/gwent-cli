@@ -26,16 +26,18 @@ class PyGameView(AbstractView):
         self.player2 = None
         self.selected_card = 0
         self.hand_offset = 0
+        # Change these parameters to adjust card sizes
         self.config = {
-            'card_width': 200,
+            'card_width': 300,             # Wider hand cards
             'card_height': 280,
-            'card_spacing': 220,
-            'battlefield_spacing': 130,
+            'card_spacing': 320,           # Adjust spacing for wider cards
+            'battlefield_spacing': 170,    # Adjust spacing on battlefield
             'max_visible_cards': 5,
             'font_size': 20,
             'title_font_size': 32,
             'line_height': 25,
-            'battlefield_card_height': 80
+            'battlefield_card_height': 80,
+            'battlefield_card_width': 160   # Wider battlefield cards
         }
         if config:
             self.config.update(config)
@@ -81,8 +83,8 @@ class PyGameView(AbstractView):
         self.screen.fill(self.COLORS['black'])
         
         pygame.draw.line(self.screen, self.COLORS['white'], 
-                        (self.game_area_width, 0), 
-                        (self.game_area_width, self.height))
+                         (self.game_area_width, 0), 
+                         (self.game_area_width, self.height))
 
         title = self.title_font.render("GWENT CLI", True, self.COLORS['white'])
         self.screen.blit(title, (self.game_area_width // 2 - title.get_width() // 2, 10))
@@ -99,7 +101,7 @@ class PyGameView(AbstractView):
         self.screen.blit(weather, (10, 50))
         
         turn = self.font.render(f"Turn: {'Player' if is_player_turn else 'Opponent'}", 
-                              True, self.COLORS['white'])
+                                True, self.COLORS['white'])
         self.screen.blit(turn, (self.game_area_width - 200, 50))
 
     def _draw_battlefields(self, board):
@@ -132,11 +134,14 @@ class PyGameView(AbstractView):
             y_offset += 20
 
     def _draw_battlefield_row(self, row_name, cards, y_offset, row_height, is_player):
+        # Draw the row boundary
         pygame.draw.rect(self.screen, self.COLORS['gray'],
-                        (10, y_offset + 30, self.game_area_width - 20, row_height - 40), 1)
+                         (10, y_offset + 30, self.game_area_width - 20, row_height - 40), 1)
         
         visible_width = self.game_area_width - 40
-        cards_per_view = visible_width // self.config['battlefield_spacing']
+        card_width = self.config.get('battlefield_card_width', 160)
+        spacing = self.config.get('battlefield_spacing', 170)
+        cards_per_view = visible_width // spacing
         
         side = 'player' if is_player else 'enemy'
         scroll_pos = self.row_scroll_positions[side][row_name]
@@ -147,14 +152,44 @@ class PyGameView(AbstractView):
         visible_cards = cards[scroll_pos:scroll_pos + cards_per_view]
         card_x = 20
         for card in visible_cards:
-            card_text = self.font.render(f"{card.name}({card.value})", True, self.COLORS['white'])
-            self.screen.blit(card_text, (card_x, y_offset + 40))
-            card_x += self.config['battlefield_spacing']
+            # Draw card box background and border
+            pygame.draw.rect(self.screen, self.COLORS['black'], 
+                             (card_x, y_offset + 40, card_width, row_height - 50))
+            pygame.draw.rect(self.screen, self.COLORS['white'], 
+                             (card_x, y_offset + 40, card_width, row_height - 50), 1)
+            
+            # Wrap the text so it fits within the card box
+            wrapped_lines = self._wrap_text(f"{card.name} ({card.value})", card_width - 10)
+            line_y = y_offset + 45
+            for line in wrapped_lines:
+                rendered_line = self.font.render(line, True, self.COLORS['white'])
+                self.screen.blit(rendered_line, (card_x + 5, line_y))
+                line_y += self.config['line_height']
+                if line_y > y_offset + row_height - 50:
+                    break
+            card_x += spacing
         
         if len(cards) > cards_per_view:
             self._draw_scrollbar(self.game_area_width - 15, y_offset + 30,
-                               10, row_height - 40,
-                               len(cards), cards_per_view, scroll_pos)
+                                 10, row_height - 40,
+                                 len(cards), cards_per_view, scroll_pos)
+
+    def _wrap_text(self, text, max_width):
+        """Splits text into multiple lines so each line fits within max_width."""
+        words = text.split(' ')
+        lines = []
+        current_line = ""
+        for word in words:
+            test_line = f"{current_line} {word}" if current_line else word
+            if self.font.size(test_line)[0] <= max_width:
+                current_line = test_line
+            else:
+                if current_line:
+                    lines.append(current_line)
+                current_line = word
+        if current_line:
+            lines.append(current_line)
+        return lines
 
     def _draw_hand(self, hand):
         if not hand:
@@ -163,7 +198,7 @@ class PyGameView(AbstractView):
         y_pos = self.height - self.config['card_height'] - 40
         
         pygame.draw.rect(self.screen, self.COLORS['black'],
-                        (0, y_pos - 30, self.game_area_width, self.config['card_height'] + 70))
+                         (0, y_pos - 30, self.game_area_width, self.config['card_height'] + 70))
 
         title = f"Your Hand ({len(hand)} cards)"
         self.screen.blit(self.font.render(title, True, self.COLORS['white']), (10, y_pos - 30))
@@ -186,9 +221,9 @@ class PyGameView(AbstractView):
             color = self.COLORS['yellow'] if i + self.card_scroll_pos == self.selected_card else self.COLORS['white']
             
             pygame.draw.rect(self.screen, self.COLORS['gray'], 
-                           (x_pos, y_pos, self.config['card_width'], self.config['card_height']))
+                             (x_pos, y_pos, self.config['card_width'], self.config['card_height']))
             pygame.draw.rect(self.screen, color, 
-                           (x_pos, y_pos, self.config['card_width'], self.config['card_height']), 2)
+                             (x_pos, y_pos, self.config['card_width'], self.config['card_height']), 2)
 
             text_x = x_pos + 10
             text_y = y_pos + 10
@@ -212,9 +247,9 @@ class PyGameView(AbstractView):
 
         if len(hand) > cards_per_view:
             thumb_rect = self._draw_horizontal_scrollbar(10, y_pos + self.config['card_height'] + 5,
-                                         self.game_area_width - 20, 10,
-                                         len(hand), cards_per_view,
-                                         self.card_scroll_pos)
+                                                          self.game_area_width - 20, 10,
+                                                          len(hand), cards_per_view,
+                                                          self.card_scroll_pos)
             self.hand_scrollbar_thumb_rect = thumb_rect
             self.hand_scrollbar_track_rect = (10, y_pos + self.config['card_height'] + 5, self.game_area_width - 20, 10)
         else:
@@ -224,42 +259,32 @@ class PyGameView(AbstractView):
     def _draw_scrollbar(self, x, y, width, height, total_items, visible_items, scroll_pos):
         if total_items <= visible_items:
             return
-            
         pygame.draw.rect(self.screen, self.COLORS['gray'], 
-                        (x, y, 10, height), 1)
-        
+                         (x, y, 10, height), 1)
         thumb_height = max(20, (visible_items / total_items) * height)
         thumb_pos = y + (scroll_pos / total_items) * (height - thumb_height)
-        
         pygame.draw.rect(self.screen, self.COLORS['white'],
-                        (x, thumb_pos, 10, thumb_height))
+                         (x, thumb_pos, 10, thumb_height))
 
     def _draw_horizontal_scrollbar(self, x, y, width, height, total_items, visible_items, scroll_pos):
         if total_items <= visible_items:
             return None
-
         pygame.draw.rect(self.screen, self.COLORS['gray'],
-                        (x, y + height - 10, width, 10), 1)
-
+                         (x, y + height - 10, width, 10), 1)
         thumb_width = max(40, (visible_items / total_items) * width)
         thumb_x = x + (scroll_pos / (total_items - visible_items)) * (width - thumb_width)
-
         pygame.draw.rect(self.screen, self.COLORS['white'],
-                        (thumb_x, y + height - 10, thumb_width, 10))
-
+                         (thumb_x, y + height - 10, thumb_width, 10))
         return (thumb_x, y + height - 10, thumb_width, 10)
 
     def _draw_log(self):
         y_pos = 10
         log_x = self.game_area_width + 10
-        
         title = self.font.render("Game Log", True, self.COLORS['white'])
         self.screen.blit(title, (log_x, y_pos))
-        
         pygame.draw.line(self.screen, self.COLORS['white'],
-                        (log_x, y_pos + 25),
-                        (self.width - 10, y_pos + 25))
-        
+                         (log_x, y_pos + 25),
+                         (self.width - 10, y_pos + 25))
         y_pos += 35
         for entry in self.log[-10:]:
             text = self.font.render(entry[:25], True, self.COLORS['white'])
@@ -284,10 +309,9 @@ class PyGameView(AbstractView):
                         self._adjust_scroll_to_selected()
                     elif event.key == pygame.K_p:
                         return "PASS"
-            
             if self.board:
                 self.draw_board(self.board, self.last_scores[0], 
-                              self.last_scores[1], True, hand)
+                                self.last_scores[1], True, hand)
             pygame.time.wait(50)
 
     def _adjust_scroll_to_selected(self):
@@ -300,15 +324,12 @@ class PyGameView(AbstractView):
     def get_user_row_choice(self, card) -> Optional[str]:
         if not hasattr(card, 'row') or not card.row:
             return "CLOSE"
-            
         valid_rows = [r.name for r in card.row]
         if len(valid_rows) == 1:
             return valid_rows[0]
-            
         text = self.font.render("Choose row (c)lose, (r)anged, (s)iege:", True, self.COLORS['white'])
         self.screen.blit(text, (10, self.height - 30))
         pygame.display.flip()
-        
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
@@ -324,23 +345,18 @@ class PyGameView(AbstractView):
     def get_graveyard_card_choice(self, revivable_cards) -> Optional[int]:
         if not revivable_cards:
             return None
-            
         selection = 0
         while True:
             self.screen.fill(self.COLORS['black'])
-            
             text = self.font.render("Choose card to revive (Enter to select, ESC to cancel):", 
-                                  True, self.COLORS['white'])
+                                    True, self.COLORS['white'])
             self.screen.blit(text, (10, 10))
-            
             for i, (idx, card) in enumerate(revivable_cards):
                 color = self.COLORS['yellow'] if i == selection else self.COLORS['white']
                 card_text = f"{i+1}) {card.name} ({card.value})"
                 text = self.font.render(card_text, True, color)
                 self.screen.blit(text, (10, 40 + i * 25))
-            
             pygame.display.flip()
-            
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
@@ -361,7 +377,6 @@ class PyGameView(AbstractView):
     def handle_events(self, timeout: int = 100):
         clock = pygame.time.Clock()
         clock.tick(60)
-        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 raise KeyboardInterrupt
@@ -376,7 +391,6 @@ class PyGameView(AbstractView):
                     self._handle_scrollbar_drag(event.pos)
             elif event.type == pygame.KEYDOWN:
                 self._handle_keyboard_event(event)
-                
         pygame.time.wait(timeout)
 
     def _handle_mouse_click(self, event):
