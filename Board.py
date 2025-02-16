@@ -1,5 +1,5 @@
-from Card import *
-
+from Card import UnitCard, HeroCard, WeatherCard, Weather, Ability, WeatherEffect, AbstractCard  # Add explicit import
+from typing import List
 class Board:
 
     def __init__(self, rows = ("CLOSE", "RANGED", "SIEGE")):
@@ -8,6 +8,20 @@ class Board:
         self.row_multiplier_player = {row: 1 for row in rows}
         self.row_multiplier_enemy = {row: 1 for row in rows}
         self.weather = []
+        self.player_passed = False
+        self.enemy_passed = False
+        self._enemy_hand_reference = None  # Initialize reference in __init__
+
+    def clear_board(self):
+        """Clear the battlefield for next round"""
+        rows = self.player.keys()
+        self.player = {row: [] for row in rows}
+        self.enemy = {row: [] for row in rows}
+        self.row_multiplier_player = {row: 1 for row in rows}
+        self.row_multiplier_enemy = {row: 1 for row in rows}
+        self.weather = []
+        self.player_passed = False
+        self.enemy_passed = False
     
     def get_value_of_row(self, player, row_multiplier, row):
         # Returns the total value of the player's rows calculates the weather effect. If regular cards and weather cards are in the same row, the value of the card is 1 if not a hero
@@ -46,14 +60,22 @@ class Board:
     
     def get_row_value(self, is_player, row):
         return self.get_player_row_Value(row) if is_player else self.get_enemy_row_Value(row)
-    
-    def add_card_to_row(self, card, is_player, row):
 
-        # to do handle abilities
+    def add_card_to_row(self, card, is_player, row):
+        # Check for spy using proper attribute access
+        if isinstance(card, UnitCard) and card.ability == Ability.SPY:
+            if is_player:
+                self.enemy[row].append(card)
+            else:
+                self.player[row].append(card)
+            return True
+            
+        # Normal card placement
         if is_player:
             self.player[row].append(card)
         else:
             self.enemy[row].append(card)
+        return False
     
     def add_value_multiplier_card(self, card, is_player, row):
         if is_player:
@@ -105,5 +127,12 @@ class Board:
                 if card.value == largest:
                     player[row].remove(card)
                     break
-        
-            
+
+    def get_enemy_hand(self) -> List[AbstractCard]:
+        """Get reference to enemy hand for display only"""
+        return self._enemy_hand_reference or []
+
+    def set_enemy_hand(self, hand: List[AbstractCard]):
+        """Temporarily store reference to enemy hand for display"""
+        self._enemy_hand_reference = hand
+

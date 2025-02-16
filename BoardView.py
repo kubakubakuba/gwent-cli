@@ -1,9 +1,19 @@
 import curses
 from typing import List
-from Card import AbstractCard, Ability
+from Card import AbstractCard, Ability, HeroCard, UnitCard, WeatherCard, SpecialCard, Weather, Special
+from Player import INITIAL_LIVES  # Import the constant
 
 class BoardView:
-    def __init__(self):
+    # Default view configuration
+    DEFAULT_CONFIG = {
+        'card_width': 10,          # Width of card content (excluding borders)
+        'card_spacing': 14,        # Space between cards in hand
+        'battlefield_spacing': 12,  # Space between cards on battlefield
+        'max_visible_cards': 5,    # Maximum number of visible cards in hand
+        'log_lines': 3,           # Number of visible log lines
+    }
+
+    def __init__(self, config=None):
         self.stdscr = None
         self.log = []
         self.hand_offset = 0  # For scrolling hand cards
@@ -16,6 +26,13 @@ class BoardView:
         self.opponent_score = 0
         self.is_player_turn = True
         self.weather = []  # Default weather state
+        self.player1 = None
+        self.player2 = None
+        
+        # Initialize configuration
+        self.config = self.DEFAULT_CONFIG.copy()
+        if config:
+            self.config.update(config)
 
     def init_curses(self):
         self.stdscr = curses.initscr()
@@ -23,22 +40,33 @@ class BoardView:
         curses.cbreak()
         curses.start_color()
         self.stdscr.keypad(True)
+        
+        # Force the terminal to use a monospace font
+        curses.use_default_colors()
+        
+        # Initialize colors after starting curses
+        curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLUE)  # Selected card
+        curses.init_pair(2, curses.COLOR_YELLOW, curses.COLOR_BLACK)  # Hero card
+        
         self.max_y, self.max_x = self.stdscr.getmaxyx()
         
         if self.max_y < 30 or self.max_x < 80:
             self.end_curses()
-            raise RuntimeError("Terminal window too small. Minimum size: 80x30")
+            raise RuntimeError("Terminal window too small. Minimum size: 80x30\nPlease use a monospace font.")
         
         curses.mousemask(curses.ALL_MOUSE_EVENTS | curses.REPORT_MOUSE_POSITION)
         curses.mouseinterval(0)
-        # Initialize some colors
-        curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLUE)  # Selected card
 
     def end_curses(self):
         curses.nocbreak()
         self.stdscr.keypad(False)
         curses.echo()
         curses.endwin()
+
+    def setup_players(self, player1, player2):
+        """Set up references to player controllers"""
+        self.player1 = player1
+        self.player2 = player2
 
     def draw_board(self, board, player_score, opponent_score, is_player_turn, player_hand: List[AbstractCard]):
         try:
@@ -64,8 +92,10 @@ class BoardView:
             self.safe_addstr(2, self.max_x - 20, f"Turn: {turn_str}")
             
             # Scores
-            self.safe_addstr(3, 2, f"Opponent Score: {opponent_score}")
-            self.safe_addstr(3, self.max_x - 20, f"Player Score: {player_score}")
+            player1_lives = "O" * self.player1.get_lives() + "X" * (INITIAL_LIVES - self.player1.get_lives())
+            player2_lives = "O" * self.player2.get_lives() + "X" * (INITIAL_LIVES - self.player2.get_lives())
+            self.safe_addstr(3, 2, f"Player 2 Score: {opponent_score} Lives: [{player2_lives}] (Cards: {len(self.board.get_enemy_hand())})")
+            self.safe_addstr(3, self.max_x - 45, f"Player 1 Score: {player_score} Lives: [{player1_lives}] (Cards: {len(player_hand)})")
             
             # Battlefields
             self.draw_battlefield(5, board.enemy, False)
@@ -100,15 +130,26 @@ class BoardView:
         self.safe_addstr(start_line, 2, f"{owner} Battlefield:")
         line = start_line + 1
         
-        for row_name, cards in rows.items():
+        # Define row order based on player/opponent
+        row_order = ["SIEGE", "RANGED", "CLOSE"] if is_player else ["CLOSE", "RANGED", "SIEGE"]
+        
+        for row_name in row_order:
             if line >= self.max_y - 2:
                 break
                 
+            cards = rows[row_name]
             value = sum(card.value for card in cards if hasattr(card, 'value'))
             self.safe_addstr(line, 2, f"[{row_name}] Value: {value}")
             
             if cards:
-                card_str = " ".join(f"[{card.name[:8]}]" for card in cards)
+                card_str = ""
+                for card in cards:
+                    # Use special borders for hero cards on battlefield
+                    name_width = self.config['battlefield_spacing']
+                    if isinstance(card, HeroCard):
+                        card_str += f"╣{card.name[:name_width]:<{name_width}}╠ "
+                    else:
+                        card_str += f"[{card.name[:name_width]:<{name_width}}] "
                 self.safe_addstr(line + 1, 4, card_str)
             line += 2
 
@@ -125,50 +166,74 @@ class BoardView:
             self.safe_addstr(start_line + 1, 4, "No cards")
             return
             
-        visible_cards = hand[self.hand_offset:self.hand_offset + 5]
+        visible_cards = hand[self.hand_offset:self.hand_offset + self.config['max_visible_cards']]
         for i, card in enumerate(visible_cards):
-            x_pos = 4 + i * 16  # Increased spacing between cards
+            x_pos = 4 + i * self.config['card_spacing']
             
-            # Draw card box
-            self.safe_addstr(start_line + 1, x_pos, "+----------+")
-            self.safe_addstr(start_line + 2, x_pos, f"|{card.name[:8]:<8} |")
+            # Calculate card dimensions
+            width = self.config['card_width']
+            border_width = width + 2  # Add 2 for borders
             
-            # Show value for unit cards
+            # Draw card box with configurable width
+            is_hero = isinstance(card, HeroCard)
+            border_top = "╔" + "═" * width + "╗" if is_hero else "┌" + "─" * width + "┐"
+            border_side = "║" if is_hero else "│"
+            border_bottom = "╚" + "═" * width + "╝" if is_hero else "└" + "─" * width + "┘"
+            
+            # Draw card frame
+            self.safe_addstr(start_line + 1, x_pos, border_top)
+            self.safe_addstr(start_line + 2, x_pos, f"{border_side}{card.name[:width]:<{width}}{border_side}")
+            
+            # Value line - exactly 10 chars
             if hasattr(card, 'value'):
-                self.safe_addstr(start_line + 3, x_pos, f"|Val: {card.value:<4} |")
+                self.safe_addstr(start_line + 3, x_pos, f"{border_side}Val:{card.value:<{width-4}}{border_side}")
             else:
-                self.safe_addstr(start_line + 3, x_pos, "|         |")
+                self.safe_addstr(start_line + 3, x_pos, f"{border_side}{' ' * width}{border_side}")
             
-            # Show rows for unit cards
+            # Row line - exactly 10 chars
             if hasattr(card, 'row') and card.row:
-                row_str = '/'.join(r.name[:1] for r in card.row)  # C/R/S for Close/Ranged/Siege
-                self.safe_addstr(start_line + 4, x_pos, f"|Row:{row_str:<5} |")
+                row_str = '/'.join(r.name[0] for r in card.row)
+                self.safe_addstr(start_line + 4, x_pos, f"{border_side}Row:{row_str:<{width-4}}{border_side}")
             else:
-                self.safe_addstr(start_line + 4, x_pos, "|         |")
+                self.safe_addstr(start_line + 4, x_pos, f"{border_side}{' ' * width}{border_side}")
             
-            # Show ability if present
+            # Ability/type line - exactly 10 chars
             if hasattr(card, 'ability') and card.ability and card.ability != Ability.NONE:
-                ability_str = card.ability.name[:8]
-                self.safe_addstr(start_line + 5, x_pos, f"|{ability_str:<9}|")
-            elif hasattr(card, 'type'):  # For weather/special cards
-                type_str = card.type.name[:8]
-                self.safe_addstr(start_line + 5, x_pos, f"|{type_str:<9}|")
+                ability_str = card.ability.name[:width]
+                self.safe_addstr(start_line + 5, x_pos, f"{border_side}{ability_str:<{width}}{border_side}")
+            elif hasattr(card, 'type'):
+                type_str = card.type.name[:width]
+                self.safe_addstr(start_line + 5, x_pos, f"{border_side}{type_str:<{width}}{border_side}")
             else:
-                self.safe_addstr(start_line + 5, x_pos, "|         |")
+                self.safe_addstr(start_line + 5, x_pos, f"{border_side}{' ' * width}{border_side}")
                 
-            self.safe_addstr(start_line + 6, x_pos, "+----------+")
+            self.safe_addstr(start_line + 6, x_pos, border_bottom)
+            
+            # If hero, redraw with special borders
+            if is_hero:
+                self.safe_addstr(start_line + 1, x_pos, "╔" + "═" * width + "╗")
+                for y in range(2, 6):
+                    # Replace first and last char of each line with hero border
+                    self.stdscr.addch(start_line + y, x_pos, "║")
+                    self.stdscr.addch(start_line + y, x_pos + width + 1, "║")
+                self.safe_addstr(start_line + 6, x_pos, "╚" + "═" * width + "╝")
+            
+            # Apply colors after drawing full card
+            if is_hero:
+                for y in range(start_line + 1, start_line + 7):
+                    self.stdscr.chgat(y, x_pos, border_width, curses.color_pair(2))
             
             # Highlight selected card
             if i + self.hand_offset == self.hand_selected:
                 for y in range(start_line + 1, start_line + 7):
-                    self.stdscr.chgat(y, x_pos, 11, curses.color_pair(1))
+                    self.stdscr.chgat(y, x_pos, border_width, curses.color_pair(1))
         
-        if len(hand) > 5:
+        if len(hand) > self.config['max_visible_cards']:
             self.safe_addstr(start_line + 7, 4, "Use <- -> to scroll")
 
     def get_user_card_choice(self, hand):
         """Get card choice using mouse or keyboard, two-step: select then confirm"""
-        self.safe_addstr(self.max_y-2, 2, "Select card: arrows/numbers to select, Enter to confirm, ESC to cancel")
+        self.safe_addstr(self.max_y-2, 2, "Select card: ←→ to move, Enter to confirm, P to pass turn, ESC to cancel")
         self.stdscr.refresh()
         
         while True:
@@ -177,13 +242,42 @@ class BoardView:
             if event == 27:  # ESC
                 return None
                 
-            if event == curses.KEY_MOUSE:
+            elif event == curses.KEY_LEFT:
+                if self.hand_selected > 0:
+                    self.hand_selected -= 1
+                    if self.hand_selected < self.hand_offset:
+                        self.hand_offset = self.hand_selected
+                    self.draw_board(self.board, self.player_score, self.opponent_score, 
+                                  self.is_player_turn, hand)
+                    
+            elif event == curses.KEY_RIGHT:
+                if self.hand_selected < len(hand) - 1:
+                    self.hand_selected += 1
+                    if self.hand_selected >= self.hand_offset + self.config['max_visible_cards']:
+                        self.hand_offset = self.hand_selected - (self.config['max_visible_cards'] - 1)
+                    self.draw_board(self.board, self.player_score, self.opponent_score, 
+                                  self.is_player_turn, hand)
+                    
+            elif event == curses.KEY_UP:
+                # Select visible card
+                if self.hand_selected >= len(hand):
+                    self.hand_selected = len(hand) - 1
+                self.draw_board(self.board, self.player_score, self.opponent_score, 
+                              self.is_player_turn, hand)
+                    
+            elif event == curses.KEY_DOWN:
+                # Deselect card
+                self.hand_selected = -1
+                self.draw_board(self.board, self.player_score, self.opponent_score, 
+                              self.is_player_turn, hand)
+
+            elif event == curses.KEY_MOUSE:
                 try:
                     _, mx, my, _, _ = curses.getmouse()
                     if 24 <= my <= 30:  # Hand area
-                        for i, _ in enumerate(hand[self.hand_offset:self.hand_offset + 5]):
-                            card_x = 4 + i * 16
-                            if card_x <= mx < card_x + 11:
+                        for i, _ in enumerate(hand[self.hand_offset:self.hand_offset + self.config['max_visible_cards']]):
+                            card_x = 4 + i * self.config['card_spacing']
+                            if card_x <= mx < card_x + self.config['card_width'] + 2:
                                 self.hand_selected = i + self.hand_offset
                                 self.draw_board(self.board, self.player_score, 
                                               self.opponent_score, self.is_player_turn, hand)
@@ -200,18 +294,9 @@ class BoardView:
                     self.hand_selected = index
                     self.draw_board(self.board, self.player_score, self.opponent_score, 
                                   self.is_player_turn, hand)
-
-            elif event == curses.KEY_LEFT:
-                if self.hand_offset > 0:
-                    self.hand_offset -= 1
-                    self.draw_board(self.board, self.player_score, self.opponent_score, 
-                                  self.is_player_turn, hand)
                     
-            elif event == curses.KEY_RIGHT:
-                if self.hand_offset + 5 < len(hand):
-                    self.hand_offset += 1
-                    self.draw_board(self.board, self.player_score, self.opponent_score, 
-                                  self.is_player_turn, hand)
+            elif event == ord('p') or event == ord('P'):  # Pass turn
+                return "PASS"
 
     def get_user_row_choice(self, card):
         """Get row choice based on card's valid rows"""
@@ -223,10 +308,13 @@ class BoardView:
             return valid_rows[0]
             
         # Create row shortcuts dictionary
-        row_shortcuts = {
-            'C': 'CLOSE',
-            'R': 'RANGED',
-            'S': 'SIEGE'
+        row_map = {
+            ord('c'): 'CLOSE',
+            ord('C'): 'CLOSE',
+            ord('r'): 'RANGED',
+            ord('R'): 'RANGED',
+            ord('s'): 'SIEGE',
+            ord('S'): 'SIEGE'
         }
         
         # Show available rows with shortcuts
@@ -236,23 +324,25 @@ class BoardView:
         
         while True:
             try:
-                choice = self.stdscr.getstr().decode('utf-8').upper().strip()
+                # Get single character instead of string
+                key = self.stdscr.getch()
                 
-                # Accept either full name or first letter
-                if choice in valid_rows:
-                    return choice
-                elif choice in row_shortcuts and row_shortcuts[choice] in valid_rows:
-                    return row_shortcuts[choice]
+                # Check if key is a valid shortcut
+                if key in row_map:
+                    row_choice = row_map[key]
+                    if row_choice in valid_rows:
+                        return row_choice
                     
-                # Show error message
-                self.safe_addstr(self.max_y-2, 2, " " * (self.max_x - 4))  # Clear line
-                self.safe_addstr(self.max_y-2, 2, f"Invalid choice! Choose [{'/'.join(options)}]: ")
-                self.stdscr.refresh()
+                # Show error only for non-special keys
+                if 32 <= key <= 126:  # Printable characters
+                    self.safe_addstr(self.max_y-2, 2, " " * (self.max_x - 4))
+                    self.safe_addstr(self.max_y-2, 2, f"Invalid choice! Choose [{'/'.join(options)}]: ")
+                    self.stdscr.refresh()
                 
             except:
                 continue
 
     def draw_log(self, start_line: int):
         self.safe_addstr(start_line, 2, "Game Log:")
-        for i, entry in enumerate(self.log[-3:]):  # Show last 3 log entries
+        for i, entry in enumerate(self.log[-self.config['log_lines']:]):  # Show last log lines based on config
             self.safe_addstr(start_line + i + 1, 4, f"> {entry}")

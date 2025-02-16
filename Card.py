@@ -62,7 +62,7 @@ class UnitCard(AbstractCard):
 		self.row : list[CombatRow] = None
 		self.faction : Faction = None
 		self.value : int = 0
-		self.ability : Ability = None
+		self.ability : Ability = Ability.NONE  # Initialize with a default value
 
 	def is_hero(self):
 		return False
