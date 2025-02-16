@@ -35,6 +35,75 @@ class Board:
     def get_enemy_value(self):
         return sum([self.get_value_of_row(self.enemy, self.row_multiplier_enemy, row) for row in self.enemy])
     
-    def get_player_row_
+    def get_player_row_Value(self, row):
+        return self.get_value_of_row(self.player, self.row_multiplier_player, row)
+    
+    def get_enemy_row_Value(self, row):
+        return self.get_value_of_row(self.enemy, self.row_multiplier_enemy, row)
+    
+    def get_value(self, is_player):
+        return self.get_player_value() if is_player else self.get_enemy_value()
+    
+    def get_row_value(self, is_player, row):
+        return self.get_player_row_Value(row) if is_player else self.get_enemy_row_Value(row)
+    
+    def add_card_to_row(self, card, is_player, row):
 
+        # to do handle abilities
+        if is_player:
+            self.player[row].append(card)
+        else:
+            self.enemy[row].append(card)
+    
+    def add_value_multiplier_card(self, card, is_player, row):
+        if is_player:
+            self.row_multiplier_player[row] = card.value
+        else:
+            self.row_multiplier_enemy[row] = card.value
+
+    def play_weather(self, weather: WeatherCard):
+        if weather.type == Weather.CLEAR:
+            self.clear_weather()
+        else:
+            self.weather.append(weather.type)
+    
+    def clear_weather(self):
+        self.weather = []
+
+    def destroy_strongest_card(self):
+
+        players = [self.player, self.enemy]
+
+        # get largest value
+        largest = 0
+        for player in players:
+            for row in player:
+                for card in player[row]:
+                    if issubclass(type(card), UnitCard):
+                        if card.value > largest:
+                            largest = card.value
+
+        # remove cards with largest value
+        for player in players:
+            for row in player:
+                for card in player[row]:
+                    if issubclass(type(card), UnitCard):
+                        if card.value == largest:
+                            player[row].remove(card)
+                            break
+    
+    def destroy_strongest_card_in_row(self, is_player, row):
+        player = self.player if is_player else self.enemy
+        largest = 0
+        for card in player[row]:
+            if issubclass(type(card), UnitCard):
+                if card.value > largest:
+                    largest = card.value
+        
+        for card in player[row]:
+            if issubclass(type(card), UnitCard):
+                if card.value == largest:
+                    player[row].remove(card)
+                    break
+        
             

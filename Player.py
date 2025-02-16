@@ -3,7 +3,8 @@ from Deck import Deck
 from typing import List
 from abc import ABC, abstractmethod
 from CardLoader import CardLoader
-from Card import UnitCard, Weather
+from Card import UnitCard, Weather, Special, WeatherCard, SpecialCard
+from Board import Board
 
 INITIAL_LIVES = 2
 
@@ -42,9 +43,11 @@ class PlayerState():
         return self.name
     
 class PlayerController(ABC):
-    def __init__(self, state: PlayerState):
+    def __init__(self, state: PlayerState, is_player: bool):
         self.state: PlayerState = state
         self.skiped_move: bool = False
+        self.is_player: bool = is_player
+
 
     def get_hand(self):
         return self.state.get_hand()
@@ -61,25 +64,22 @@ class PlayerController(ABC):
     def get_skiped_move(self):
         return self.skiped_move
     
-    def play_card(self, card: str, board: Board):
+    
+    def play_card(self, card: str, board: Board, row: int):
         self.state.play_card(card)
         card_obj = CardLoader.get_card_by_id(card)
-        # test if card is a unit card
-        if issubclass(type(card_obj), UnitCard):
-            BoardView.getCardPositionFrom(card_obj.row)
         
         if issubclass(type(card_obj), WeatherCard):
             board.play_weather(card_obj.type)
+
+        if issubclass(type(card_obj), UnitCard):
+            board.add_card_to_row(card_obj, self.is_player, row)
+        
         if issubclass(type(card_obj), SpecialCard):
             if card_obj.type == Special.COMMANDERS_HORN:
-                board.play_commanders_horn()
-            if card_obj.type == Special.DECOY:
-                board.play_decoy()
+                board.add_value_multiplier_card(card_obj, self.is_player, row)
             if card_obj.type == Special.SCORCH:
-                board.play_scorch()
-            if card_obj.type == Special.MADROEME:
-                board.play_madroeme()
-        
+                board.destroy_strongest_card()
 
 class HumanController(PlayerController):
     def __init__(self, state: PlayerState):
