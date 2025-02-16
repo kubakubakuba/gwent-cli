@@ -2,7 +2,6 @@ import curses
 from typing import List
 from model.Card import AbstractCard, Ability, HeroCard, UnitCard, WeatherCard, SpecialCard, Weather, Special
 from controller.Player import INITIAL_LIVES  # Import the constant
-from controller.Player import INITIAL_LIVES  # Import the constant
 
 class BoardView:
     # Default view configuration
