@@ -1,5 +1,5 @@
 from typing import List, Dict, Optional
-from Card import AbstractCard, HeroCard, SpecialCard, WeatherCard, UnitCard, Weather, Special, Faction, Ability, CombatRow
+from model.Card import AbstractCard, HeroCard, SpecialCard, WeatherCard, UnitCard, Weather, Special, Faction, Ability, CombatRow
 import tomllib
 
 class CardLoader:

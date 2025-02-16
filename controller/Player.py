@@ -1,10 +1,10 @@
 import asyncio
-from Deck import Deck
+from model.Deck import Deck
 from typing import List
 from abc import ABC, abstractmethod
-from CardLoader import CardLoader
-from Card import UnitCard, Weather, Special, WeatherCard, SpecialCard, AbstractCard, Ability
-from Board import Board
+from singleton.CardLoader import CardLoader
+from model.Card import UnitCard, Weather, Special, WeatherCard, SpecialCard, AbstractCard, Ability
+from controledmodel.Board import Board
 
 INITIAL_LIVES = 2  # Define constant here since it's player-related
 

@@ -1,4 +1,4 @@
-from Card import UnitCard, HeroCard, WeatherCard, Weather, Ability, WeatherEffect, AbstractCard  # Add explicit import
+from model.Card import UnitCard, HeroCard, WeatherCard, Weather, Ability, WeatherEffect, AbstractCard  # Add explicit import
 from typing import List
 class Board:
 

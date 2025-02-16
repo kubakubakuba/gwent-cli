@@ -1,12 +1,12 @@
-from Player import PlayerState
-from Board import Board
-from BoardView import BoardView
-from Player import HumanController, AIController
-from CardLoader import CardLoader
+from controller.Player import PlayerState
+from controledmodel.Board import Board
+from views.BoardView import BoardView
+from controller.Player import HumanController, AIController
+from singleton.CardLoader import CardLoader
 import random
 import curses
 from typing import List
-from Card import UnitCard, WeatherCard, SpecialCard, Ability
+from model.Card import UnitCard, WeatherCard, SpecialCard, Ability
 import traceback  # Add this import
 
 class GwentGame:
