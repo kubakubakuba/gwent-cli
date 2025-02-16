@@ -8,9 +8,11 @@ import curses
 from typing import List
 from model.Card import UnitCard, WeatherCard, SpecialCard, Ability
 import traceback  # Add this import
+from views.ViewFactory import ViewFactory
+import argparse  # Add this import
 
 class GwentGame:
-    def __init__(self, view_config=None):
+    def __init__(self, view_type="curses", view_config=None):
         # Get singleton instance
         self.card_loader = CardLoader.get_instance()
         
@@ -24,7 +26,9 @@ class GwentGame:
         
         # Initialize game components
         self.board = Board()
-        self.view = BoardView(view_config)
+        self.view = ViewFactory.create_view(view_type, view_config)
+        self.view.board = self.board  # Add this line to set initial board reference
+        
         self.player1 = HumanController(player_state)
         self.player2 = AIController(ai_state)
         
@@ -82,7 +86,7 @@ class GwentGame:
 
     def run(self):
         try:
-            self.view.init_curses()
+            self.view.init_display()  # Changed from init_curses
             print("\033[6;5m") # Request monospace font mode
             self.view.draw_board(self.board, 0, 0, self.is_player_turn, self.player1.get_hand())
             
@@ -104,14 +108,14 @@ class GwentGame:
                     self.handle_input()
                         
                 except Exception as e:
-                    self.view.end_curses()
+                    self.view.cleanup_display()  # Changed from end_curses
                     print(f"Error: {str(e)}")
                     print("Traceback:")
                     traceback.print_exc()
                     break
                     
         except Exception as e:
-            self.view.end_curses()
+            self.view.cleanup_display()  # Changed from end_curses
             print(f"Error: {str(e)}")
             print("Traceback:")
             traceback.print_exc()
@@ -191,11 +195,10 @@ class GwentGame:
             self.player2.pass_turn()
             self.board.enemy_passed = True
             self.is_player_turn = True
-            # Refresh display after passing
             self.refresh_display()
             return
             
-        curses.napms(1000)
+        # Remove curses.napms and let view handle timing
         card, row = self.player2.make_move(self.view)
         if isinstance(card, list):  # Handle muster cards
             for muster_card in card:
@@ -219,14 +222,12 @@ class GwentGame:
                            self.is_player_turn, self.player1.get_hand())
 
     def handle_input(self):
-        self.view.stdscr.timeout(100)
-        key = self.view.stdscr.getch()
-        if key == curses.KEY_RESIZE:
-            self.view.max_y, self.view.max_x = self.view.stdscr.getmaxyx()
+        """Handle view-agnostic input events"""
+        self.view.handle_events(100)  # Use the abstract method instead of direct curses calls
 
     def end_game(self):
         try:
-            self.view.end_curses()
+            self.view.cleanup_display()  # Changed from end_curses
         except:
             pass
         winner = "Player" if self.player_score >= self.opponent_score else "Opponent"
@@ -234,13 +235,35 @@ class GwentGame:
 
 # Example usage:
 if __name__ == "__main__":
-    # Optional: customize view
-    config = {
-        'card_width': 12,
-        'card_spacing': 15,
-        'battlefield_spacing': 14,
-        'max_visible_cards': 6,
-        'log_lines': 4
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='Gwent CLI Game')
+    parser.add_argument('-v', '--view', 
+                       choices=['curses', 'pygame'],
+                       default='curses',
+                       help='Choose view type (default: curses)')
+    
+    args = parser.parse_args()
+    
+    # Different configs for different views
+    configs = {
+        'curses': {
+            'card_width': 12,
+            'card_spacing': 15,
+            'battlefield_spacing': 14,
+            'max_visible_cards': 6,
+            'log_lines': 4
+        },
+        'pygame': {
+            'card_width': 200,
+            'card_height': 120,
+            'card_spacing': 220,
+            'battlefield_spacing': 130,
+            'max_visible_cards': 5,
+            'font_size': 20,
+            'title_font_size': 32,
+            'log_lines': 10
+        }
     }
-    game = GwentGame(config)
+    
+    game = GwentGame(view_type=args.view, view_config=configs[args.view])
     game.run()

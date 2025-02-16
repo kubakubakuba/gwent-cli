@@ -509,3 +509,10 @@ class BoardView(AbstractView):  # Inherit from AbstractView
         if not self.screen_too_small:
             self.pad = curses.newpad(self.max_y + 1, self.max_x + 1)
             self.pad.keypad(True)
+
+    def handle_events(self, timeout: int = 100):
+        """Handle curses events"""
+        self.stdscr.timeout(timeout)
+        key = self.stdscr.getch()
+        if key == curses.KEY_RESIZE:
+            self.handle_resize()

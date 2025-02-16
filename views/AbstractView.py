@@ -49,3 +49,8 @@ class AbstractView(ABC):
     def handle_resize(self):
         """Handle display resize events"""
         pass
+
+    @abstractmethod
+    def handle_events(self, timeout: int = 100):
+        """Handle any pending input events with optional timeout"""
+        pass
