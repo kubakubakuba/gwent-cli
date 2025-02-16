@@ -216,10 +216,22 @@ class BoardView:
         for y in range(start_line, start_line + 8):  # Height of card display + scroll message
             self.safe_addstr(y, 2, " " * (max_width - 4))  # Clear the line
             
-        self.safe_addstr(start_line, 2, "Your Hand:")
+        # Draw hand title with scroll indicators
+        title = "Your Hand:"
+        if len(hand) > self.config['max_visible_cards']:
+            if self.hand_offset > 0:
+                title = "← " + title
+            if self.hand_offset + self.config['max_visible_cards'] < len(hand):
+                title = title + " →"
+        self.safe_addstr(start_line, 2, title)
+
         if not hand:
             self.safe_addstr(start_line + 1, 4, "No cards")
             return
+
+        # Add card count indicator
+        card_count = f"({self.hand_offset + 1}-{min(self.hand_offset + self.config['max_visible_cards'], len(hand))}/{len(hand)})"
+        self.safe_addstr(start_line, len(title) + 4, card_count)
             
         visible_cards = hand[self.hand_offset:self.hand_offset + self.config['max_visible_cards']]
         for i, card in enumerate(visible_cards):
