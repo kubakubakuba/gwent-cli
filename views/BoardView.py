@@ -2,8 +2,9 @@ import curses
 from typing import List, Optional
 from model.Card import AbstractCard, Ability, HeroCard, UnitCard, WeatherCard, SpecialCard, Weather, Special
 from controller.Player import INITIAL_LIVES  # Import the constant
+from .AbstractView import AbstractView
 
-class BoardView:
+class BoardView(AbstractView):  # Inherit from AbstractView
     # Default view configuration
     DEFAULT_CONFIG = {
         'card_width': 10,          # Width of card content (excluding borders)
@@ -488,3 +489,23 @@ class BoardView:
                 self.safe_addstr(start_line + 2 + line_num, x_pos + 2, line)
                 remaining = remaining[log_width:]
                 line_num += 1
+
+    def init_display(self):
+        """Implement AbstractView method"""
+        self.init_curses()
+        
+    def cleanup_display(self):
+        """Implement AbstractView method"""
+        self.end_curses()
+        
+    def add_log_message(self, message: str):
+        """Implement AbstractView method"""
+        self.log.append(message)
+        
+    def handle_resize(self):
+        """Implement AbstractView method"""
+        self.max_y, self.max_x = self.stdscr.getmaxyx()
+        self.screen_too_small = (self.max_y < 30 or self.max_x < 80)
+        if not self.screen_too_small:
+            self.pad = curses.newpad(self.max_y + 1, self.max_x + 1)
+            self.pad.keypad(True)
