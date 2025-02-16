@@ -1,12 +1,27 @@
-from typing import List, Dict
+from typing import List, Dict, Optional
 from Card import AbstractCard, HeroCard, SpecialCard, WeatherCard, UnitCard, Weather, Special, Faction, Ability, CombatRow
 import tomllib
 
-#singleton basically
 class CardLoader:
+    _instance: Optional['CardLoader'] = None
+    
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance.cards: Dict[str, AbstractCard] = None
+        return cls._instance
+
     def __init__(self):
-        self.cards: Dict[str, AbstractCard] = None
-        self._load_cards()
+        # Only load cards once when first instance is created
+        if self.cards is None:
+            self._load_cards()
+
+    @classmethod
+    def get_instance(cls) -> 'CardLoader':
+        """Proper way to get CardLoader instance"""
+        if cls._instance is None:
+            cls._instance = CardLoader()
+        return cls._instance
 
     def get_all_card_ids(self):
         """Return list of all valid card IDs"""

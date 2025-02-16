@@ -3,22 +3,22 @@ from Deck import Deck
 from typing import List
 from abc import ABC, abstractmethod
 from CardLoader import CardLoader
-from Card import UnitCard, Weather, Special, WeatherCard, SpecialCard
+from Card import UnitCard, Weather, Special, WeatherCard, SpecialCard, AbstractCard
 from Board import Board
 
 INITIAL_LIVES = 2
 
-class PlayerState():
+class PlayerState:
+    """Model class for player state"""
     def __init__(self, name: str, faction: str, deck: List[str], king: str):
         self.name: str = name
         self.faction: str = faction
         self.deck: Deck = Deck(deck)
         self.king: str = king
         self.lives: int = INITIAL_LIVES
-        self.skiped_move: bool = False
+        self.passed: bool = False
 
-
-    def draw(self, n: int):
+    def draw(self, n: int) -> List[str]:
         return self.deck.take_cards(n)
     
     def play_card(self, card: str):
@@ -27,129 +27,84 @@ class PlayerState():
     def discard_card(self, card: str):
         self.deck.discard_card(card)
 
-    def get_hand(self):
+    def get_hand(self) -> List[str]:
         return self.deck.get_hand()
 
-    def get_graveyard(self):
+    def get_graveyard(self) -> List[str]:
         return self.deck.get_graveyard()
 
-    def lose_life(self):
+    def lose_life(self) -> bool:
         self.lives -= 1
-        if self.lives <= 0:
-            return True
-        return False
+        return self.lives <= 0
     
-    def __str__(self):
-        return self.name
+    def pass_turn(self):
+        self.passed = True
     
+    def has_passed(self) -> bool:
+        return self.passed
+
 class PlayerController(ABC):
     def __init__(self, state: PlayerState, is_player: bool):
         self.state: PlayerState = state
-        self.skiped_move: bool = False
         self.is_player: bool = is_player
+        self.card_loader = CardLoader.get_instance()
 
+    def get_hand(self) -> List[AbstractCard]:
+        """Dynamically convert current hand from IDs to card objects"""
+        return [self.card_loader.get_card_by_id(cid) for cid in self.state.get_hand()]
 
-    def get_hand(self):
-        return self.state.get_hand()
-    
-    def get_graveyard(self):
-        return self.state.get_graveyard()
+    def play_card(self, index: int) -> AbstractCard:
+        """Final implementation of card playing - should not be overridden"""
+        hand = self.state.get_hand()
+        if index >= len(hand):
+            return None
+            
+        card_id = hand[index]
+        self.state.play_card(card_id)
+        return self.card_loader.get_card_by_id(card_id)
+
     @abstractmethod
-    async def play(self, board: Board):
-        raise NotImplemented
-    
-    def skip_move(self):
-        self.skiped_move = True
-
-    def get_skiped_move(self):
-        return self.skiped_move
-    
-    
-    def play_card(self, card: str, board: Board, row: int):
-        self.state.play_card(card)
-        card_obj = CardLoader.get_card_by_id(card)
-        
-        if issubclass(type(card_obj), WeatherCard):
-            board.play_weather(card_obj.type)
-
-        if issubclass(type(card_obj), UnitCard):
-            board.add_card_to_row(card_obj, self.is_player, row)
-        
-        if issubclass(type(card_obj), SpecialCard):
-            if card_obj.type == Special.COMMANDERS_HORN:
-                board.add_value_multiplier_card(card_obj, self.is_player, row)
-            if card_obj.type == Special.SCORCH:
-                board.destroy_strongest_card()
+    def make_move(self, view) -> tuple[AbstractCard, str]:
+        """Abstract method that each controller must implement for their specific move logic"""
+        pass
 
 class HumanController(PlayerController):
     def __init__(self, state: PlayerState):
-        super().__init__(state)
-        self.action_taken: bool = False
-        self._action_event = asyncio.Event()
-    
-    def set_action_taken(self):
-        self.action_taken = True
-        self._action_event.set()
+        super().__init__(state, True)
 
-    async def play(self, card: str):
-        if self.get_hand().count(card) == 0 or self.get_skiped_move():
-            return
-        self.action_taken = False
-        await self._action_event.wait()
-        self._action_event.clear()
-
-    def play_card(self, card: str):
-        self.state.play_card(card)
-        self.set_action_taken()
-
-    
+    def make_move(self, view):
+        """Human player move implementation"""
+        card_index = view.get_user_card_choice(self.get_hand())
+        if card_index is None:
+            return None, None
+            
+        card = self.play_card(card_index)
+        if not card:
+            return None, None
+            
+        row = None
+        if hasattr(card, "row"):
+            row = view.get_user_row_choice(card)
+            if not row:
+                return None, None
+                
+        return card, row or "CLOSE"
 
 class AIController(PlayerController):
     def __init__(self, state: PlayerState):
-        super().__init__(state)
-    
-    async def play(self, board: Board):
-        await asyncio.sleep(1)
-        hand = self.get_hand()
-        if len(hand) == 0:
-            return
-        card = hand[0]
-        self.state.play_card(card)
-        board.play_card(self.state, card)
+        super().__init__(state, False)
 
-class HumanController:
-    def __init__(self, hand):
-        self.hand = hand
-
-    def play_card(self, board_view):
-        # Ask user which card to play & which row (if unit/horn). Simplified example:
-        card_index = board_view.get_user_card_choice(self.hand)
-        if card_index is None:
+    def make_move(self, view):
+        """AI player move implementation"""
+        if not self.state.get_hand():
             return None, None
-        card = self.hand.pop(card_index)
-        row = None
-        if hasattr(card, "row"):  # e.g. UnitCard or HeroCard
-            row = board_view.get_user_row_choice(card)
-        return card, row
-
-    def decide_pass(self):
-        # Example hook for pass logic
-        return False
-
-class AIController:
-    def __init__(self, hand):
-        self.hand = hand
-
-    def play_card(self, board_view):
-        # Simple example: pick first card, random row if needed
-        if not self.hand:
+            
+        card = self.play_card(0)  # Play first card
+        if not card:
             return None, None
-        card = self.hand.pop(0)
-        row = None
-        if hasattr(card, "row"):
-            row = "CLOSE"  # or any AI logic
+            
+        row = "CLOSE"
+        if hasattr(card, "row") and card.row:
+            row = card.row[0].name
+            
         return card, row
-
-    def decide_pass(self):
-        # Basic AI pass condition
-        return False

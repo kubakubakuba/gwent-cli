@@ -167,8 +167,8 @@ class BoardView:
             self.safe_addstr(start_line + 7, 4, "Use <- -> to scroll")
 
     def get_user_card_choice(self, hand):
-        """Get card choice using mouse or keyboard"""
-        self.safe_addstr(self.max_y-2, 2, "Click on a card or press [0-9] to select, Enter to confirm, ESC to cancel")
+        """Get card choice using mouse or keyboard, two-step: select then confirm"""
+        self.safe_addstr(self.max_y-2, 2, "Select card: arrows/numbers to select, Enter to confirm, ESC to cancel")
         self.stdscr.refresh()
         
         while True:
@@ -179,23 +179,22 @@ class BoardView:
                 
             if event == curses.KEY_MOUSE:
                 try:
-                    _, mx, my, _, bstate = curses.getmouse()
-                    # Check if click is in hand area
-                    y_start = 24  # Start of hand area
-                    if y_start + 1 <= my <= y_start + 6:  # Height of card box
-                        for i, card in enumerate(hand[self.hand_offset:self.hand_offset + 5]):
-                            card_x = 4 + i * 16  # Card spacing
-                            if card_x <= mx < card_x + 11:  # Card width
+                    _, mx, my, _, _ = curses.getmouse()
+                    if 24 <= my <= 30:  # Hand area
+                        for i, _ in enumerate(hand[self.hand_offset:self.hand_offset + 5]):
+                            card_x = 4 + i * 16
+                            if card_x <= mx < card_x + 11:
                                 self.hand_selected = i + self.hand_offset
-                                # Immediately return the selected card on click
-                                return self.hand_selected
+                                self.draw_board(self.board, self.player_score, 
+                                              self.opponent_score, self.is_player_turn, hand)
                 except:
                     pass
                     
-            elif event == 10:  # Enter key
-                return self.hand_selected
+            elif event == 10 or event == ord('\n'):  # Enter key - confirm selection
+                if 0 <= self.hand_selected < len(hand):
+                    return self.hand_selected
                     
-            elif event in [ord(str(i)) for i in range(10)]:
+            elif event in [ord(str(i)) for i in range(10)]:  # Number keys
                 index = int(chr(event))
                 if 0 <= index < len(hand):
                     self.hand_selected = index
@@ -223,13 +222,35 @@ class BoardView:
         if len(valid_rows) == 1:
             return valid_rows[0]
             
-        self.safe_addstr(self.max_y-2, 2, f"Choose row [{'/'.join(valid_rows)}]: ")
+        # Create row shortcuts dictionary
+        row_shortcuts = {
+            'C': 'CLOSE',
+            'R': 'RANGED',
+            'S': 'SIEGE'
+        }
+        
+        # Show available rows with shortcuts
+        options = [f"{r[0]}({r.lower()})" for r in valid_rows]
+        self.safe_addstr(self.max_y-2, 2, f"Choose row [{'/'.join(options)}]: ")
         self.stdscr.refresh()
         
         while True:
-            choice = self.stdscr.getstr().decode('utf-8').upper()
-            if choice in valid_rows:
-                return choice
+            try:
+                choice = self.stdscr.getstr().decode('utf-8').upper().strip()
+                
+                # Accept either full name or first letter
+                if choice in valid_rows:
+                    return choice
+                elif choice in row_shortcuts and row_shortcuts[choice] in valid_rows:
+                    return row_shortcuts[choice]
+                    
+                # Show error message
+                self.safe_addstr(self.max_y-2, 2, " " * (self.max_x - 4))  # Clear line
+                self.safe_addstr(self.max_y-2, 2, f"Invalid choice! Choose [{'/'.join(options)}]: ")
+                self.stdscr.refresh()
+                
+            except:
+                continue
 
     def draw_log(self, start_line: int):
         self.safe_addstr(start_line, 2, "Game Log:")
