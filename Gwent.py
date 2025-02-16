@@ -152,6 +152,8 @@ class GwentGame:
             self.player1.pass_turn()
             self.board.player_passed = True
             self.is_player_turn = False
+            # Refresh display after passing
+            self.refresh_display()
             return
 
         move_result = self.player1.make_move(self.view)
@@ -162,6 +164,8 @@ class GwentGame:
             self.board.player_passed = True
             self.view.log.append("Player 1 passed")
             self.is_player_turn = False
+            # Refresh display after passing
+            self.refresh_display()
             return
             
         # Only try to unpack if it's not a pass
@@ -171,12 +175,16 @@ class GwentGame:
                 self.board.add_card_to_row(card, True, row or "CLOSE")
                 self.view.log.append(f"Player 1 played {card.name}")
                 self.is_player_turn = False
+                # Refresh display after playing card
+                self.refresh_display()
 
     def handle_ai_turn(self):
         if not self.player2.get_hand() or self.player2.has_passed():
             self.player2.pass_turn()
             self.board.enemy_passed = True
             self.is_player_turn = True
+            # Refresh display after passing
+            self.refresh_display()
             return
             
         curses.napms(1000)
@@ -185,6 +193,16 @@ class GwentGame:
             self.board.add_card_to_row(card, False, row or "CLOSE")
             self.view.log.append(f"Player 2 played {card.name}")
             self.is_player_turn = True
+            # Refresh display after playing card
+            self.refresh_display()
+
+    def refresh_display(self):
+        """Update the display with current game state"""
+        self.player_score = self.board.get_player_value()
+        self.opponent_score = self.board.get_enemy_value()
+        self.board.set_enemy_hand(self.player2.get_hand())
+        self.view.draw_board(self.board, self.player_score, self.opponent_score,
+                           self.is_player_turn, self.player1.get_hand())
 
     def handle_input(self):
         self.view.stdscr.timeout(100)

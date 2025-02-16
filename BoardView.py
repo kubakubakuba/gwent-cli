@@ -11,6 +11,7 @@ class BoardView:
         'battlefield_spacing': 12,  # Space between cards on battlefield
         'max_visible_cards': 5,    # Maximum number of visible cards in hand
         'log_lines': 3,           # Number of visible log lines
+        'log_width': 30,  # Width of the log section
     }
 
     def __init__(self, config=None):
@@ -28,6 +29,7 @@ class BoardView:
         self.weather = []  # Default weather state
         self.player1 = None
         self.player2 = None
+        self.current_line = 0  # Add line tracker
         
         # Initialize configuration
         self.config = self.DEFAULT_CONFIG.copy()
@@ -45,8 +47,11 @@ class BoardView:
         curses.use_default_colors()
         
         # Initialize colors after starting curses
-        curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLUE)  # Selected card
+        curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLUE)    # Selected card
         curses.init_pair(2, curses.COLOR_YELLOW, curses.COLOR_BLACK)  # Hero card
+        curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_RED)     # Close combat
+        curses.init_pair(4, curses.COLOR_WHITE, curses.COLOR_GREEN)   # Ranged
+        curses.init_pair(5, curses.COLOR_WHITE, curses.COLOR_MAGENTA) # Siege
         
         self.max_y, self.max_x = self.stdscr.getmaxyx()
         
@@ -78,88 +83,138 @@ class BoardView:
             
             self.stdscr.clear()
             
-            # Draw frame
-            self.safe_addstr(0, 0, "+" + "-" * (self.max_x - 2) + "+")
+            # Calculate game area width and log area width
+            game_area_width = self.max_x - self.config['log_width'] - 3  # -3 for borders and separator
+            log_area_start = game_area_width + 2  # +2 for border and separator
+            
+            # Draw vertical separator
+            for y in range(0, self.max_y):
+                self.safe_addstr(y, game_area_width + 1, "│")
+            
+            # Draw main game area (left side)
+            self.safe_addstr(0, 0, "+" + "-" * (game_area_width) + "+")
+            self.safe_addstr(self.max_y-1, 0, "+" + "-" * (game_area_width) + "+")
+
+            # Draw log area (right side)
+            self.safe_addstr(0, log_area_start, "+" + "-" * (self.config['log_width'] - 1) + "+")
+            self.safe_addstr(self.max_y-1, log_area_start, "+" + "-" * (self.config['log_width'] - 1) + "+")
             
             # Title
             title = "GWENT CLI"
-            self.safe_addstr(1, (self.max_x - len(title)) // 2, title)
+            self.safe_addstr(1, (game_area_width - len(title)) // 2, title)
             
             # Weather and turn info
             weather_str = ", ".join([w.name for w in (board.weather if board else [])]) or "Clear"
             self.safe_addstr(2, 2, f"Weather: [{weather_str}]")
             turn_str = "Player" if is_player_turn else "Opponent"
-            self.safe_addstr(2, self.max_x - 20, f"Turn: {turn_str}")
+            self.safe_addstr(2, game_area_width - 20, f"Turn: {turn_str}")
             
             # Scores
             player1_lives = "O" * self.player1.get_lives() + "X" * (INITIAL_LIVES - self.player1.get_lives())
             player2_lives = "O" * self.player2.get_lives() + "X" * (INITIAL_LIVES - self.player2.get_lives())
             self.safe_addstr(3, 2, f"Player 2 Score: {opponent_score} Lives: [{player2_lives}] (Cards: {len(self.board.get_enemy_hand())})")
-            self.safe_addstr(3, self.max_x - 45, f"Player 1 Score: {player_score} Lives: [{player1_lives}] (Cards: {len(player_hand)})")
+            self.safe_addstr(3, game_area_width - 45, f"Player 1 Score: {player_score} Lives: [{player1_lives}] (Cards: {len(player_hand)})")
             
-            # Battlefields
-            self.draw_battlefield(5, board.enemy, False)
-            self.draw_battlefield(12, board.player, True)
+            # Reset line tracker
+            self.current_line = 4  # Start after header area
             
-            # Draw game log
-            self.draw_log(19)
+            # Draw Player 2's battlefield (top)
+            self.current_line = self.draw_battlefield(self.current_line + 1, board.enemy, False, 
+                                                    ["SIEGE", "RANGED", "CLOSE"], 
+                                                    curses.color_pair(3), game_area_width)
             
-            # Draw hand at the bottom
-            self.draw_hand(24, player_hand)
+            # Add separator space
+            self.current_line += 1
+            
+            # Draw Player 1's battlefield (bottom)
+            self.current_line = self.draw_battlefield(self.current_line + 1, board.player, True,
+                                                    ["CLOSE", "RANGED", "SIEGE"],
+                                                    curses.color_pair(4), game_area_width)
+            
+            # Draw game log in right panel
+            self.draw_log(1, log_area_start)
+            
+            # Draw hand at dynamic position with remaining space
+            hand_position = min(self.current_line + 2, self.max_y - 10)  # Ensure space for hand
+            self.draw_hand(hand_position, player_hand, game_area_width)
             
             # Draw bottom frame
-            self.safe_addstr(self.max_y-1, 0, "+" + "-" * (self.max_x - 2) + "+")
+            self.safe_addstr(self.max_y-1, 0, "+" + "-" * (game_area_width) + "+")
             
             self.stdscr.refresh()
             
         except curses.error:
             pass  # Ignore curses errors from writing outside window
 
-    def safe_addstr(self, y, x, string):
-        """Safely add a string to the screen, truncating if necessary"""
+    def safe_addstr(self, y, x, string, color_pair=0):
+        """Safely add a string to the screen with optional color"""
         try:
             if y < self.max_y and x < self.max_x:
                 remaining_space = self.max_x - x - 1
                 if remaining_space > 0:
-                    self.stdscr.addstr(y, x, string[:remaining_space])
+                    self.stdscr.addstr(y, x, string[:remaining_space], color_pair)
         except curses.error:
             pass
 
-    def draw_battlefield(self, start_line: int, rows: dict, is_player: bool):
-        owner = "Your" if is_player else "Opponent"
-        self.safe_addstr(start_line, 2, f"{owner} Battlefield:")
-        line = start_line + 1
+    def draw_battlefield(self, start_line: int, rows: dict, is_player: bool, row_order: List[str], base_color_pair, max_width: int) -> int:
+        """Draw battlefield and return the next available line number"""
+        current_line = start_line
         
-        # Define row order based on player/opponent
-        row_order = ["SIEGE", "RANGED", "CLOSE"] if is_player else ["CLOSE", "RANGED", "SIEGE"]
+        owner = "Your" if is_player else "Opponent"
+        self.safe_addstr(current_line, 2, f"{owner} Battlefield:")
+        current_line += 1
+
+        # Color map for different rows
+        row_colors = {
+            "CLOSE": curses.color_pair(3),
+            "RANGED": curses.color_pair(4),
+            "SIEGE": curses.color_pair(5)
+        }
         
         for row_name in row_order:
-            if line >= self.max_y - 2:
+            if current_line >= self.max_y - 2:
                 break
                 
+            # Add extra spacing before each row
+            current_line += 1
+            
             cards = rows[row_name]
             value = sum(card.value for card in cards if hasattr(card, 'value'))
-            self.safe_addstr(line, 2, f"[{row_name}] Value: {value}")
+            color = row_colors[row_name]
+            
+            # Draw row header with color
+            row_str = f"[{row_name}] Value: {value}"
+            self.safe_addstr(current_line, 2, " " * (max_width - 4), color)
+            self.safe_addstr(current_line, 2, row_str, color)
             
             if cards:
+                current_line += 1
+                # Draw cards line with color
+                self.safe_addstr(current_line, 2, " " * (max_width - 4), color)
                 card_str = ""
                 for card in cards:
-                    # Use special borders for hero cards on battlefield
                     name_width = self.config['battlefield_spacing']
                     if isinstance(card, HeroCard):
                         card_str += f"╣{card.name[:name_width]:<{name_width}}╠ "
                     else:
                         card_str += f"[{card.name[:name_width]:<{name_width}}] "
-                self.safe_addstr(line + 1, 4, card_str)
-            line += 2
+                self.safe_addstr(current_line, 4, card_str, color)
+            else:
+                current_line += 1
+                # Draw empty line with color
+                self.safe_addstr(current_line, 2, " " * (max_width - 4), color)
+            
+            current_line += 1  # Space after each row
+            
+        return current_line  # Return the next available line
 
-    def draw_hand(self, start_line: int, hand: List[AbstractCard]):
+    def draw_hand(self, start_line: int, hand: List[AbstractCard], max_width: int):
         if start_line >= self.max_y - 3:
             return
         
         # Clear the hand area first
         for y in range(start_line, start_line + 8):  # Height of card display + scroll message
-            self.safe_addstr(y, 2, " " * (self.max_x - 4))  # Clear the line
+            self.safe_addstr(y, 2, " " * (max_width - 4))  # Clear the line
             
         self.safe_addstr(start_line, 2, "Your Hand:")
         if not hand:
@@ -342,7 +397,21 @@ class BoardView:
             except:
                 continue
 
-    def draw_log(self, start_line: int):
-        self.safe_addstr(start_line, 2, "Game Log:")
-        for i, entry in enumerate(self.log[-self.config['log_lines']:]):  # Show last log lines based on config
-            self.safe_addstr(start_line + i + 1, 4, f"> {entry}")
+    def draw_log(self, start_line: int, x_pos: int):
+        """Draw game log in right panel"""
+        log_width = self.config['log_width'] - 4  # Account for borders
+        
+        self.safe_addstr(start_line, x_pos + 2, "Game Log")
+        self.safe_addstr(start_line + 1, x_pos + 1, "-" * (log_width + 2))
+        
+        # Show more log lines since we have vertical space
+        visible_lines = self.max_y - start_line - 3
+        for i, entry in enumerate(self.log[-visible_lines:]):
+            # Word wrap log entries to fit log width
+            remaining = entry
+            line_num = i
+            while remaining and line_num < visible_lines:
+                line = remaining[:log_width]
+                self.safe_addstr(start_line + 2 + line_num, x_pos + 2, line)
+                remaining = remaining[log_width:]
+                line_num += 1
