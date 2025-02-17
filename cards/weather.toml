@@ -1,0 +1,44 @@
+[[cards]]
+name = "Biting Frost"
+id = "4"
+filename = "frost"
+description = ""
+count = 3
+card_class = "WeatherCard"
+weather_type = "FROST"
+
+[[cards]]
+name = "Clear Weather"
+id = "7"
+filename = "clear"
+description = ""
+count = 2
+card_class = "WeatherCard"
+weather_type = "CLEAR"
+
+[[cards]]
+name = "Impenetrable Fog"
+id = "5"
+filename = "fog"
+description = ""
+count = 3
+card_class = "WeatherCard"
+weather_type = "FOG"
+
+[[cards]]
+name = "Torrential Rain"
+id = "6"
+filename = "rain"
+description = ""
+count = 2
+card_class = "WeatherCard"
+weather_type = "RAIN"
+
+[[cards]]
+name = "Skellige Storm"
+id = ""
+filename = "storm"
+description = ""
+count = 3
+card_class = "WeatherCard"
+weather_type = "SKELLIGE_STORM"

@@ -1,0 +1,300 @@
+[[cards]]
+name = "Mysterious Elf"
+id = "142"
+filename = "mysterious_elf"
+description = ""
+count = 1
+faction = "ANY"
+row = [ "CLOSE",]
+value = 0
+card_class = "HeroCard"
+ability = "SPY"
+
+[[cards]]
+name = "Cirilla Fiona Elen Riannon"
+id = "139"
+filename = "ciri"
+description = ""
+count = 1
+faction = "ANY"
+row = [ "CLOSE",]
+value = 15
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Geralt of Rivia"
+id = "138"
+filename = "geralt"
+description = ""
+count = 1
+faction = "ANY"
+row = [ "CLOSE",]
+value = 15
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Triss Merigold"
+id = "141"
+filename = "triss"
+description = ""
+count = 1
+faction = "ANY"
+row = [ "CLOSE",]
+value = 7
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Yennefer of Vengerberg"
+id = "140"
+filename = "yennefer"
+description = ""
+count = 1
+faction = "ANY"
+row = [ "RANGED",]
+value = 7
+card_class = "HeroCard"
+ability = "MEDIC"
+
+[[cards]]
+name = "Esterad Thyssen"
+id = "11"
+filename = "esterad"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "CLOSE",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "John Natalis"
+id = "10"
+filename = "natalis"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "CLOSE",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Philippa Eilhart"
+id = "12"
+filename = "philippa"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "RANGED",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Vernon Roche"
+id = "9"
+filename = "vernon"
+description = ""
+count = 1
+faction = "NORTHERN_REALMS"
+row = [ "CLOSE",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Letho of Gulet"
+id = "147"
+filename = "letho"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "CLOSE",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Menno Coehoorn"
+id = "148"
+filename = "menno"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "CLOSE",]
+value = 10
+card_class = "HeroCard"
+ability = "MEDIC"
+
+[[cards]]
+name = "Morvran Voorhis"
+id = "149"
+filename = "moorvran"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "SIEGE",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Tibor Eggebracht"
+id = "150"
+filename = "tibor"
+description = ""
+count = 1
+faction = "NILFGAARD"
+row = [ "RANGED",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Draug"
+id = "143"
+filename = "draug"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Imlerith"
+id = "144"
+filename = "imlerith"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+
+[[cards]]
+name = "Kayran"
+id = "146"
+filename = "kayran"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "CLOSE", "RANGED",]
+value = 8
+card_class = "HeroCard"
+ability = "MORALE_BOOST"
+
+[[cards]]
+name = "Leshen"
+id = "145"
+filename = "leshen"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = [ "RANGED",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Eithné"
+id = "17"
+filename = "eithne"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "RANGED",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Iorveth"
+id = "20"
+filename = "iorveth"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "RANGED",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Isengrim Faoiltiarna"
+id = "19"
+filename = "isengrim"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "CLOSE",]
+value = 10
+card_class = "HeroCard"
+ability = "MORALE_BOOST"
+
+[[cards]]
+name = "Saesenthessis"
+id = "18"
+filename = "saskia"
+description = ""
+count = 1
+faction = "SCOIA_TAEL"
+row = [ "RANGED",]
+value = 10
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Cerys"
+id = ""
+filename = "cerys"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "CLOSE",]
+value = 10
+card_class = "HeroCard"
+ability = "MUSTER"
+
+[[cards]]
+name = "Ermion"
+id = ""
+filename = "ermion"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "RANGED",]
+value = 8
+card_class = "HeroCard"
+ability = "MADROEME"
+
+[[cards]]
+name = "Hemdall"
+id = ""
+filename = "hemdall"
+description = ""
+count = 0
+faction = "SKELLIGE"
+row = [ "CLOSE",]
+value = 11
+card_class = "HeroCard"
+ability = ""
+
+[[cards]]
+name = "Hjalmar"
+id = ""
+filename = "hjalmar"
+description = ""
+count = 1
+faction = "SKELLIGE"
+row = [ "RANGED",]
+value = 10
+card_class = "HeroCard"
+ability = ""

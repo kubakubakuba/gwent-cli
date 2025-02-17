@@ -1,0 +1,11 @@
+[[cards]]
+name = "Eredin Bréacc Glas - The Treacherous"
+id = ""
+filename = "eredin_the_treacherous"
+description = ""
+count = 1
+faction = "MONSTERS"
+row = []
+value = 0
+card_class = "HeroCard"
+ability = "EREDIN_TREACHEROUS"

@@ -1,0 +1,15 @@
+[[pack]]
+file="cards.toml"
+name="other cards pack"
+
+[[pack]]
+file="weather.toml"
+name="Weather pack"
+
+[[pack]]
+file="kings.toml"
+name="Kings pack"
+
+[[pack]]
+file="heroes.toml"
+name="Heroes pack"
